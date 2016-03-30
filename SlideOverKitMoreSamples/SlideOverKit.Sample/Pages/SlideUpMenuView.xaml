@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<t:SlideMenuView  xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:t="clr-namespace:SlideOverKit" x:Class="SlideOverKit.MoreSample.SlideUpMenuView">
+	<Grid Padding="10, 30, 10, 10">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="1*" />
+			<ColumnDefinition Width="9*" />
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*" />
+			<RowDefinition Height="*" />
+			<RowDefinition Height="*" />
+			<RowDefinition Height="*" />
+			<RowDefinition Height="*" />
+		</Grid.RowDefinitions>
+		<Label Text="Slide Up Menu" FontSize="24" Grid.ColumnSpan="2" XAlign="Center" YAlign="Center" TextColor="White" />
+		<Image Grid.Column="0" Grid.Row="1" Source="Home.png" WidthRequest="25" HeightRequest="25" HorizontalOptions="End" VerticalOptions="Center"/> 
+		<Label Text="Go home now?" Grid.Column="1" Grid.Row="1" XAlign="Start" YAlign="Center" TextColor="White"/>
+		<Image Grid.Column="0" Grid.Row="2" Source="Pencil.png" WidthRequest="25" HeightRequest="25" HorizontalOptions="End" VerticalOptions="Center"/> 
+		<Label Text="Set destination" Grid.Column="1" Grid.Row="2" XAlign="Start" YAlign="Center" TextColor="White"/>
+		<Image Grid.Column="0" Grid.Row="3" Source="Settings.png" WidthRequest="25" HeightRequest="25" HorizontalOptions="End" VerticalOptions="Center"/> 
+		<Label Text="Navigation settings" Grid.Column="1" Grid.Row="3" XAlign="Start" YAlign="Center" TextColor="White"/>
+		<Button Grid.ColumnSpan="2" Grid.Row="4" Text="Start" TextColor="White" FontSize="24" BorderRadius="5" BorderWidth="1" BackgroundColor="#2E3332"/>
+	</Grid>
+</t:SlideMenuView >

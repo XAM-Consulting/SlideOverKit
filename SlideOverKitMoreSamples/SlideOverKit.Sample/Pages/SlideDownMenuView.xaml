@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<t:SlideMenuView xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:t="clr-namespace:SlideOverKit" x:Class="SlideOverKit.MoreSample.SlideDownMenuView">
+	<Grid Padding="10, 100, 10, 10">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="*" />
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="1*" />
+			<RowDefinition Height="1*" />
+			<RowDefinition Height="1*" />
+			<RowDefinition Height="0.6*" />
+		</Grid.RowDefinitions>
+		<StackLayout Orientation="Vertical" Grid.Column="0" Grid.Row="0">
+			<Image Source="Report_Blue.png" WidthRequest="50" HeightRequest="50" />
+			<Label Text="Report" TextColor="Black" XAlign="Center" WidthRequest="100" HeightRequest="50" />
+		</StackLayout>
+		<StackLayout Orientation="Vertical" Grid.Column="1" Grid.Row="0">
+			<Image Source="MoneyBag_Blue.png" WidthRequest="50" HeightRequest="50" />
+			<Label Text="Money" XAlign="Center" WidthRequest="100" HeightRequest="50"/>
+		</StackLayout>
+		<StackLayout Orientation="Vertical" Grid.Column="2" Grid.Row="0">
+			<Image Source="Timeline_Blue.png" WidthRequest="50" HeightRequest="50" />
+			<Label Text="Time line" XAlign="Center" WidthRequest="100" HeightRequest="50"/>
+		</StackLayout>
+		<StackLayout Orientation="Vertical" Grid.Column="0" Grid.Row="1">
+			<Image Source="Chat_Blue.png" WidthRequest="50" HeightRequest="50" />
+			<Label Text="Comments" XAlign="Center" WidthRequest="100" HeightRequest="50"/>
+		</StackLayout>
+		<StackLayout Orientation="Vertical" Grid.Column="1" Grid.Row="1">
+			<Image Source="USBConnected_Color.png" WidthRequest="50" HeightRequest="50" />
+			<Label Text="Connected" XAlign="Center" WidthRequest="100" HeightRequest="50"/>
+		</StackLayout>
+		<StackLayout Orientation="Vertical" Grid.Column="2" Grid.Row="1">
+			<Image Source="Save_Blue.png" WidthRequest="50" HeightRequest="50" />
+			<Label Text="Save" XAlign="Center" WidthRequest="100" HeightRequest="50"/>
+		</StackLayout>
+		<StackLayout Orientation="Vertical" Grid.Column="0" Grid.Row="2">
+			<Image Source="About_Blue.png" WidthRequest="50" HeightRequest="50" />
+			<Label Text="About us" XAlign="Center" WidthRequest="100" HeightRequest="50"/>
+		</StackLayout>
+		<StackLayout Orientation="Vertical" Grid.Column="1" Grid.Row="2">
+			<Image Source="CommandLine_Blue.png" WidthRequest="50" HeightRequest="50" />
+			<Label Text="Command line" XAlign="Center" WidthRequest="100" HeightRequest="50"/>
+		</StackLayout>
+		<StackLayout Orientation="Vertical" Grid.Column="2" Grid.Row="2">
+			<Image Source="Battery_Blue.png" WidthRequest="50" HeightRequest="50" />
+			<Label Text="Battery" XAlign="Center" WidthRequest="100" HeightRequest="50"/>
+		</StackLayout>
+		<StackLayout Orientation="Vertical" Grid.ColumnSpan="3" Grid.Row="3">
+			<Slider Value="0.5" HorizontalOptions="Center" WidthRequest="200" HeightRequest="50" />
+			<Image Source="DoubleDown_Blue.png" WidthRequest="25" HeightRequest="25" HorizontalOptions="Center" />
+		</StackLayout>
+	</Grid>
+</t:SlideMenuView>
