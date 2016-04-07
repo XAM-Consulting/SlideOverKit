@@ -54,7 +54,6 @@
     <Compile Include="Pages\PopOverWithTriangleView.xaml.cs">
       <DependentUpon>PopOverWithTriangleView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\PopOverWithTrianglePage.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Pages\" />

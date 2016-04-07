@@ -26,19 +26,20 @@ namespace SlideOverKit
             set { SetValue (BackgroundViewColorProperty, value); }
         }
 
-        public static readonly BindableProperty HaveTriangleProperty = BindableProperty.Create (nameof (HaveTriangle), typeof(bool), typeof(SlidePopupView), default(bool));
-
-        public bool HaveTriangle {
-            get { return (bool)GetValue (HaveTriangleProperty); }
-            set { SetValue (HaveTriangleProperty, value); }
-        }
-
-        public static readonly BindableProperty CornerRadiusProperty = BindableProperty.Create (nameof (CornerRadius), typeof(int), typeof(SlidePopupView), default(int));
-
-        public int CornerRadius {
-            get { return (int)GetValue (CornerRadiusProperty); }
-            set { SetValue (CornerRadiusProperty, value); }
-        }
+        //TODO add this these later
+//        public static readonly BindableProperty HaveTriangleProperty = BindableProperty.Create (nameof (HaveTriangle), typeof(bool), typeof(SlidePopupView), default(bool));
+//
+//        public bool HaveTriangle {
+//            get { return (bool)GetValue (HaveTriangleProperty); }
+//            set { SetValue (HaveTriangleProperty, value); }
+//        }
+//
+//        public static readonly BindableProperty CornerRadiusProperty = BindableProperty.Create (nameof (CornerRadius), typeof(int), typeof(SlidePopupView), default(int));
+//
+//        public int CornerRadius {
+//            get { return (int)GetValue (CornerRadiusProperty); }
+//            set { SetValue (CornerRadiusProperty, value); }
+//        }
 
         public VisualElement TargetControl { get; set; }
 
@@ -64,6 +65,12 @@ namespace SlideOverKit
                 TopMargin += (parent as VisualElement).Y;
                 parent = parent.Parent;
             }
+        }
+
+        public SlidePopupView() :base()
+        {
+            this.Padding = new Thickness (0);
+            this.HasShadow = false;
         }
     }
 }

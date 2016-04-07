@@ -39,7 +39,6 @@
     <Compile Include="Gestures\VerticalGestures.cs" />
     <Compile Include="Gestures\HorizontalGestures.cs" />
     <Compile Include="IMenuContainerPage.cs" />
-    <Compile Include="Gestures\PopUpNoGestures.cs" />
     <Compile Include="IPopupContainerPage.cs" />
     <Compile Include="SlidePopupView.cs" />
     <Compile Include="PopupViewAttached.cs" />

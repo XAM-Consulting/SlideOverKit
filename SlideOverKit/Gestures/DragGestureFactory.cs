@@ -15,11 +15,6 @@ namespace SlideOverKit
                 return new HorizontalGestures (view, density);
             case MenuOrientation.RightToLeft:
                 return new HorizontalGestures (view, density);
-            case MenuOrientation.PopUpViewFromBottom:
-            case MenuOrientation.PopUpViewFromLeft:
-            case MenuOrientation.PopUpViewFromRight:
-            case MenuOrientation.PopUpViewFromTop:
-                return new PopUpNoGestures (view, density);
             default:
                 return new VerticalGesture (view, density);
             }

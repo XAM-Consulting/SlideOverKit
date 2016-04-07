@@ -32,10 +32,6 @@ namespace SlideOverKit.MoreSample
                     new Button{
                         Text ="Popovers",
                         Command = LaunchPopoversPage,
-                    },
-                    new Button{
-                        Text ="Pop Over with Triangle",
-                        Command = LaunchPopoversWithTrianglePage,
                     }
                 }
             };
@@ -79,15 +75,7 @@ namespace SlideOverKit.MoreSample
                     Navigation.PushAsync(new PopOverPage());
                 });
             }
-        }
-
-        public Command LaunchPopoversWithTrianglePage{
-            get{
-                return new Command (() => {
-                    Navigation.PushAsync(new PopOverWithTrianglePage());
-                });
-            }
-        }
+        }              
     }
 }
 

@@ -11,10 +11,6 @@ namespace SlideOverKit
         BottomToTop,
         LeftToRight,
         RightToLeft,
-        PopUpViewFromBottom,
-        PopUpViewFromTop,
-        PopUpViewFromLeft,
-        PopUpViewFromRight
     }
 
     public class SlideMenuView : ContentView

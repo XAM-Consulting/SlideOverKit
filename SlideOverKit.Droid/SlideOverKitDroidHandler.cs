@@ -133,8 +133,8 @@ namespace SlideOverKit.Droid
                 popup.CalucatePosition ();
                 double x = popup.LeftMargin;
                 double y = popup.TopMargin;
-                double width = popup.WidthRequest == 0 ? ScreenSizeHelper.ScreenWidth - popup.LeftMargin * 2 : popup.WidthRequest;
-                double height = popup.HeightRequest == 0 ? ScreenSizeHelper.ScreenHeight - popup.TopMargin * 2 : popup.HeightRequest;
+                double width = popup.WidthRequest <= 0 ? ScreenSizeHelper.ScreenWidth - popup.LeftMargin * 2 : popup.WidthRequest;
+                double height = popup.HeightRequest <= 0 ? ScreenSizeHelper.ScreenHeight - popup.TopMargin * 2 : popup.HeightRequest;
                 popup.Layout (new Xamarin.Forms.Rectangle (x, y, width, height));
                 _popupRenderer.UpdateLayout ();
                 _popupRenderer.ViewGroup.Visibility = ViewStates.Visible;

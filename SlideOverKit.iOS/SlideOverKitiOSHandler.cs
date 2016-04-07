@@ -217,8 +217,8 @@ namespace SlideOverKit.iOS
                 if (popup.TargetControl == null) {
                     nfloat x = (nfloat)popup.LeftMargin;
                     nfloat y = (nfloat)popup.TopMargin;
-                    nfloat width = (nfloat)(popup.WidthRequest == 0 ? ScreenSizeHelper.ScreenWidth - popup.LeftMargin * 2 : popup.WidthRequest);
-                    nfloat height = (nfloat)(popup.HeightRequest == 0 ? ScreenSizeHelper.ScreenHeight - popup.TopMargin * 2 : popup.HeightRequest);
+                    nfloat width = (nfloat)(popup.WidthRequest <= 0 ? ScreenSizeHelper.ScreenWidth - popup.LeftMargin * 2 : popup.WidthRequest);
+                    nfloat height = (nfloat)(popup.HeightRequest <= 0 ? ScreenSizeHelper.ScreenHeight - popup.TopMargin * 2 : popup.HeightRequest);
                     pos = new CGRect (x, y, width, height);
                 } else {
                     var targetControl = RendererFactory.GetRenderer (popup.TargetControl).NativeView;
