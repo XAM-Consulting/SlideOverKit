@@ -16,6 +16,8 @@ namespace SlideOverKit.iOS
         UIPanGestureRecognizer _panGesture;
         IDragGesture _dragGesture;
 
+        IPopupContainerPage _popupBasePage;
+        UIView _popupNativeView;
 
         public SlideOverKitiOSHandler ()
         {
@@ -45,10 +47,31 @@ namespace SlideOverKit.iOS
                 return false;
         }
 
+        bool CheckPageAndPopup ()
+        {
+            if (_popupBasePage != null && _popupBasePage.PopupViews != null && _popupBasePage.PopupViews.Count > 0)
+                return true;
+            else
+                return false;
+        }
+
         UIView _backgroundOverlay;
 
         void HideBackgroundOverlay ()
         {
+            if (_backgroundOverlay != null) {
+                _backgroundOverlay.RemoveFromSuperview ();
+                _backgroundOverlay.Dispose ();
+                _backgroundOverlay = null;
+            }
+        }
+
+        void HideBackgroundForPopup ()
+        {
+            if (_popupNativeView != null) {
+                _popupNativeView.RemoveFromSuperview ();
+                _popupNativeView = null;
+            }
             if (_backgroundOverlay != null) {
                 _backgroundOverlay.RemoveFromSuperview ();
                 _backgroundOverlay.Dispose ();
@@ -79,6 +102,27 @@ namespace SlideOverKit.iOS
                 _backgroundOverlay.Frame = new CGRect (_pageRenderer.View.Frame.Location, _pageRenderer.View.Frame.Size);
                 _pageRenderer.View.InsertSubviewBelow (_backgroundOverlay, _menuOverlayRenderer.NativeView);
             }
+        }
+
+        void ShowBackgroundForPopup (UIColor color)
+        {
+            if (!CheckPageAndPopup ())
+                return;
+
+            if (_backgroundOverlay != null) {
+                _backgroundOverlay.BackgroundColor = color;
+                return;
+            }
+            _backgroundOverlay = new UIView ();     
+            _backgroundOverlay.BackgroundColor = color;
+
+            _backgroundOverlay.AddGestureRecognizer (new UITapGestureRecognizer (() => {
+                this._popupBasePage.HidePopupAction ();
+            }));
+                
+            _backgroundOverlay.Frame = new CGRect (UIApplication.SharedApplication.KeyWindow.Frame.Location, UIApplication.SharedApplication.KeyWindow.Frame.Size);
+            UIApplication.SharedApplication.KeyWindow.AddSubview (_popupNativeView);
+            UIApplication.SharedApplication.KeyWindow.InsertSubviewBelow (_backgroundOverlay, _popupNativeView);   
         }
 
         void LayoutMenu ()
@@ -153,14 +197,72 @@ namespace SlideOverKit.iOS
 
         }
 
+        void LayoutPopup ()
+        {
+            if (!CheckPageAndPopup ())
+                return;
+            _popupBasePage.ShowPopupAction = (key) => {
+                SlidePopupView popup = null;
+                if (!_popupBasePage.PopupViews.ContainsKey (key)) {
+                    if (string.IsNullOrEmpty (key) && _popupBasePage.PopupViews.Count == 1)
+                        popup = _popupBasePage.PopupViews.Values.GetEnumerator ().Current;
+                    if (popup == null)
+                        return;
+                }
+                
+                popup = _popupBasePage.PopupViews [key] as SlidePopupView;
+
+                // This should layout with LeftMargin, TopMargin, WidthRequest and HeightRequest
+                CGRect pos;
+                if (popup.TargetControl == null) {
+                    nfloat x = (nfloat)popup.LeftMargin;
+                    nfloat y = (nfloat)popup.TopMargin;
+                    nfloat width = (nfloat)(popup.WidthRequest == 0 ? ScreenSizeHelper.ScreenWidth - popup.LeftMargin * 2 : popup.WidthRequest);
+                    nfloat height = (nfloat)(popup.HeightRequest == 0 ? ScreenSizeHelper.ScreenHeight - popup.TopMargin * 2 : popup.HeightRequest);
+                    pos = new CGRect (x, y, width, height);
+                } else {
+                    var targetControl = RendererFactory.GetRenderer (popup.TargetControl).NativeView;
+                    var targetParentControl = RendererFactory.GetRenderer (popup.TargetControl.ParentView).NativeView;
+                    var center = targetParentControl.ConvertPointToView (targetControl.Center, UIApplication.SharedApplication.KeyWindow);
+
+                    nfloat y = center.Y + targetControl.Frame.Height / 2 + 5.0f;
+                    nfloat x = center.X - ((nfloat)popup.WidthRequest) / 2;
+                    nfloat width = (nfloat)popup.WidthRequest;
+                    nfloat height = (nfloat)popup.HeightRequest;
+
+                    pos = new CGRect (x, y, width, height);
+                }
+
+                popup.Layout (pos.ToRectangle ());
+                _popupNativeView = Platform.CreateRenderer (popup).NativeView;
+
+                _popupNativeView.Hidden = false;
+                _popupNativeView.Frame = pos;
+                _popupNativeView.SetNeedsLayout ();
+
+                if (_popupNativeView != null) {
+                    ShowBackgroundForPopup (popup.BackgroundViewColor.ToUIColor ());
+                }
+                popup.HideMySelf = ()=>{
+                    HideBackgroundForPopup();
+                };
+            };
+
+            _popupBasePage.HidePopupAction = () => {
+                HideBackgroundForPopup ();
+            };
+        }
+
         public void OnElementChanged (VisualElementChangedEventArgs e)
         {
             _basePage = e.NewElement as IMenuContainerPage;
+            _popupBasePage = e.NewElement as IPopupContainerPage;
         }
 
         public void ViewDidLayoutSubviews ()
         {
             LayoutMenu ();
+            LayoutPopup ();
         }
 
         public void ViewDidAppear (bool animated)

@@ -15,6 +15,9 @@ namespace SlideOverKit.Droid
         IVisualElementRenderer _popMenuOverlayRenderer;
         global::Android.Widget.LinearLayout _backgroundOverlay;
 
+        IPopupContainerPage _popupBasePage;
+        IVisualElementRenderer _popupRenderer;
+
         public SlideOverKitDroidHandler ()
         {
         }
@@ -33,7 +36,9 @@ namespace SlideOverKit.Droid
         void OnElementChanged (ElementChangedEventArgs<Page> e)
         {
             _basePage = e.NewElement as IMenuContainerPage;
+            _popupBasePage = e.NewElement as IPopupContainerPage;
             AddMenu ();
+            AddPopup ();
         }
 
         void OnLayout (bool changed, int l, int t, int r, int b)
@@ -108,8 +113,66 @@ namespace SlideOverKit.Droid
             }
         }
 
+        void AddPopup ()
+        {
+            if (_popupBasePage == null)
+                return;
+            _popupBasePage.ShowPopupAction = (key) => {
+                SlidePopupView popup = null;
+                if (!_popupBasePage.PopupViews.ContainsKey (key)) {
+                    if (string.IsNullOrEmpty (key) && _popupBasePage.PopupViews.Count == 1)
+                        popup = _popupBasePage.PopupViews.Values.GetEnumerator ().Current;
+                    if (popup == null)
+                        return;
+                }
+
+                popup = _popupBasePage.PopupViews [key] as SlidePopupView;
+
+                _popupRenderer = RendererFactory.GetRenderer (popup); 
+                var metrics = _pageRenderer.Resources.DisplayMetrics;
+                popup.CalucatePosition ();
+                double x = popup.LeftMargin;
+                double y = popup.TopMargin;
+                double width = popup.WidthRequest == 0 ? ScreenSizeHelper.ScreenWidth - popup.LeftMargin * 2 : popup.WidthRequest;
+                double height = popup.HeightRequest == 0 ? ScreenSizeHelper.ScreenHeight - popup.TopMargin * 2 : popup.HeightRequest;
+                popup.Layout (new Xamarin.Forms.Rectangle (x, y, width, height));
+                _popupRenderer.UpdateLayout ();
+                _popupRenderer.ViewGroup.Visibility = ViewStates.Visible;
+                _popupRenderer.ViewGroup.Layout (
+                    (int)(x * metrics.Density), 
+                    (int)(y * metrics.Density), 
+                    (int)((x + width) * metrics.Density), 
+                    (int)((y + height) * metrics.Density));
+                
+                ShowBackgroundForPopup (popup.BackgroundViewColor.ToAndroid ());
+                _pageRenderer.ViewGroup.AddView (_popupRenderer.ViewGroup);
+                _pageRenderer.ViewGroup.BringChildToFront (_popupRenderer.ViewGroup);
+
+                popup.HideMySelf = () => {
+                    HideBackgroundForPopup ();
+                };
+            };
+
+            _popupBasePage.HidePopupAction = () => {
+                HideBackgroundForPopup ();
+            };
+        }
+
         void HideBackgroundOverlay ()
         {
+            if (_backgroundOverlay != null) {
+                _pageRenderer.RemoveView (_backgroundOverlay);
+                _backgroundOverlay.Dispose ();
+                _backgroundOverlay = null;
+            }
+        }
+
+        void HideBackgroundForPopup ()
+        {
+            if (_popupRenderer != null) {
+                _pageRenderer.RemoveView (_popupRenderer.ViewGroup);
+                _popupRenderer = null;
+            }
             if (_backgroundOverlay != null) {
                 _pageRenderer.RemoveView (_backgroundOverlay);
                 _backgroundOverlay.Dispose ();
@@ -138,6 +201,28 @@ namespace SlideOverKit.Droid
 
             _backgroundOverlay.Touch += (object sender, Android.Views.View.TouchEventArgs e) => {
                 _basePage.HideMenuAction ();
+            };
+            var metrics = _pageRenderer.Resources.DisplayMetrics;
+            _backgroundOverlay.Layout (
+                0, 
+                0, 
+                (int)(ScreenSizeHelper.ScreenWidth * metrics.Density), 
+                (int)(ScreenSizeHelper.ScreenHeight * metrics.Density));
+
+        }
+
+        void ShowBackgroundForPopup (Android.Graphics.Color color)
+        {
+            if (_popupBasePage == null)
+                return;
+            if (_popupRenderer == null)
+                return;
+            _backgroundOverlay = new global::Android.Widget.LinearLayout (Forms.Context);       
+            _pageRenderer.ViewGroup.AddView (_backgroundOverlay);
+            _backgroundOverlay.SetBackgroundColor (color);
+
+            _backgroundOverlay.Touch += (object sender, Android.Views.View.TouchEventArgs e) => {
+                _popupBasePage.HidePopupAction ();
             };
             var metrics = _pageRenderer.Resources.DisplayMetrics;
             _backgroundOverlay.Layout (

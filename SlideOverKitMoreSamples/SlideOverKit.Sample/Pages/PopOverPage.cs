@@ -7,20 +7,23 @@ namespace SlideOverKit.MoreSample
     {
         public PopOverPage ()
         {
+            var button = new Button {
+                Text = "Show Menu",
+                Command = new Command (() => {
+                    this.ShowPopup ("FirstPopOver");
+                })
+            };
+            this.PopupViews.Add ("FirstPopOver", new PopOverView () );
+
             Content = new StackLayout { 
                 VerticalOptions = LayoutOptions.Center,
                 Spacing = 10,
                 Children = {
-                    new Button{
-                        Text ="Show Menu",
-                        Command = new Command(()=>{
-                            this.ShowMenu();
-                        })
-                    },
+                    button
                 }
             };
 
-            this.SlideMenu = new PopOverView ();
+            PopupViewAttached.SetTarget (button, "FirstPopOver");
         }
     }
 }

@@ -77,6 +77,7 @@
     <Compile Include="SlideMenuDroidRenderer.cs" />
     <Compile Include="ISlideOverKitPageRendererDroid.cs" />
     <Compile Include="SlideOverKitDroidHandler.cs" />
+    <Compile Include="SlidePopupViewRendererDroid.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />

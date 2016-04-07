@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<t:SlideMenuView xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:t="clr-namespace:SlideOverKit" x:Class="SlideOverKit.MoreSample.PopOverView">
+<t:SlidePopupView xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:t="clr-namespace:SlideOverKit" x:Class="SlideOverKit.MoreSample.PopOverView">
 
 	<StackLayout Padding="15,10,15,30" Spacing="20" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
 			
-		<Label HeightRequest="160" Text="Build some Awesome SlideOver's" FontSize="24" XAlign="Center" />
+		<Label HeightRequest="30" Text="Build some Awesome SlideOver's" FontSize="24" XAlign="Center" />
 
-		<Image HeightRequest="100" Source="xamconsulting.png" ></Image>
+		<Image HeightRequest="40" Source="xamconsulting.png" ></Image>
 
 		<Button HeightRequest="30" x:Name="DoneButton" Text="Close"  />
 
 	</StackLayout>
 
-</t:SlideMenuView>
+</t:SlidePopupView>
