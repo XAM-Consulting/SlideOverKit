@@ -171,7 +171,7 @@ namespace SlideOverKit.iOS
                         _dragGesture.DragBegin (p0.X, p0.Y);
 
                     } else if (_panGesture.State == UIGestureRecognizerState.Changed
-                               && _panGesture.NumberOfTouches == 1) {  
+                                 && _panGesture.NumberOfTouches == 1) {  
                         _dragGesture.DragMoving (p0.X, p0.Y);
 
                     } else if (_panGesture.State == UIGestureRecognizerState.Ended) {
@@ -223,9 +223,9 @@ namespace SlideOverKit.iOS
                 } else {
                     var targetControl = RendererFactory.GetRenderer (popup.TargetControl).NativeView;
                     var targetParentControl = RendererFactory.GetRenderer (popup.TargetControl.ParentView).NativeView;
-                    var center = targetParentControl.ConvertPointToView (targetControl.Center, UIApplication.SharedApplication.KeyWindow);
+                    var center = _pageRenderer.NativeView.ConvertPointToView (targetControl.Center, UIApplication.SharedApplication.KeyWindow);
 
-                    nfloat y = center.Y + targetControl.Frame.Height / 2 + 5.0f;
+                    nfloat y = center.Y + targetControl.Frame.Height / 2;
                     nfloat x = center.X - ((nfloat)popup.WidthRequest) / 2;
                     nfloat width = (nfloat)popup.WidthRequest;
                     nfloat height = (nfloat)popup.HeightRequest;
@@ -243,8 +243,8 @@ namespace SlideOverKit.iOS
                 if (_popupNativeView != null) {
                     ShowBackgroundForPopup (popup.BackgroundViewColor.ToUIColor ());
                 }
-                popup.HideMySelf = ()=>{
-                    HideBackgroundForPopup();
+                popup.HideMySelf = () => {
+                    HideBackgroundForPopup ();
                 };
             };
 

@@ -58,7 +58,7 @@ namespace SlideOverKit
             if (TargetControl == null)
                 return;
             LeftMargin += TargetControl.X + TargetControl.Width / 2 - this.WidthRequest / 2;
-            TopMargin += TargetControl.Y;
+            TopMargin += TargetControl.Y + TargetControl.Height;
             var parent = TargetControl.Parent;
             while (!(parent == null || parent is IPopupContainerPage)) {
                 LeftMargin += (parent as VisualElement).X;

@@ -237,12 +237,13 @@ namespace SlideOverKit.Droid
         {
             if (_basePage == null)
                 return;
+            
+            var metrics = _pageRenderer.Resources.DisplayMetrics;
+            ScreenSizeHelper.ScreenWidth = w / metrics.Density;
+            ScreenSizeHelper.ScreenHeight = h / metrics.Density;
 
             var menu = _basePage.SlideMenu;
             if (menu != null) {
-                var metrics = _pageRenderer.Resources.DisplayMetrics;
-                ScreenSizeHelper.ScreenWidth = w / metrics.Density;
-                ScreenSizeHelper.ScreenHeight = h / metrics.Density;
                 if (_dragGesture != null) {
                     _dragGesture.UpdateLayoutSize (menu);
 
@@ -254,14 +255,15 @@ namespace SlideOverKit.Droid
                         rect.top / metrics.Density, 
                         (rect.right - rect.left) / metrics.Density, 
                         (rect.bottom - rect.top) / metrics.Density));
-                    if (_backgroundOverlay != null)
-                        _backgroundOverlay.Layout (
-                            0, 
-                            0, 
-                            (int)(ScreenSizeHelper.ScreenWidth * metrics.Density), 
-                            (int)(ScreenSizeHelper.ScreenHeight * metrics.Density));
                 }
             }
+
+            if (_backgroundOverlay != null)
+                _backgroundOverlay.Layout (
+                    0, 
+                    0, 
+                    (int)(ScreenSizeHelper.ScreenWidth * metrics.Density), 
+                    (int)(ScreenSizeHelper.ScreenHeight * metrics.Density));
         }
     }
 

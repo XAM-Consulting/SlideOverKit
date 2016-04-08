@@ -22,11 +22,17 @@ namespace SlideOverKit
             bindable.SetValue (TargetProperty, target);
         }
 
+        public static object GetTarget (BindableObject bindable)
+        {
+            return (object)bindable.GetValue(TargetProperty);
+        }
+
         public static void OnTargetChanged (BindableObject bindable, object oldValue, object newValue)
         {
             var control = bindable as VisualElement;
 
             var parent = control.Parent;
+            //FIXME if we use attached binding in XAML, control.Parent alway return null
             while (!(parent == null || parent is IPopupContainerPage)) {
                 parent = parent.Parent;
             }
