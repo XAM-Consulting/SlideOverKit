@@ -34,10 +34,6 @@ namespace SlideOverKit.iOS
             _menuKit.ViewDidLayoutSubviewsEvent = ViewDidLayoutSubviews;
             _menuKit.ViewDidDisappearEvent = ViewDidDisappear;
             _menuKit.ViewWillTransitionToSizeEvent = ViewWillTransitionToSize;
-            if (ScreenSizeHelper.ScreenHeight == 0 && ScreenSizeHelper.ScreenWidth == 0) {
-                ScreenSizeHelper.ScreenHeight = UIScreen.MainScreen.Bounds.Height;
-                ScreenSizeHelper.ScreenWidth = UIScreen.MainScreen.Bounds.Width;
-            }
         }
 
         bool CheckPageAndMenu ()
@@ -265,6 +261,10 @@ namespace SlideOverKit.iOS
         {
             _basePage = e.NewElement as IMenuContainerPage;
             _popupBasePage = e.NewElement as IPopupContainerPage;
+
+            ScreenSizeHelper.ScreenHeight = UIScreen.MainScreen.Bounds.Height;
+            ScreenSizeHelper.ScreenWidth = UIScreen.MainScreen.Bounds.Width;
+                       
             LayoutMenu ();
             LayoutPopup ();
         }
