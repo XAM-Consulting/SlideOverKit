@@ -139,23 +139,7 @@ namespace SlideOverKit
             set {
                 SetValue (DraggerButtonWidthProperty, value);
             }
-        }
-
-
-        public static readonly BindableProperty PageBottomOffsetProperty = BindableProperty.Create (
-                                                                               "PageBottomOffset", 
-                                                                               typeof(double), 
-                                                                               typeof(SlideMenuView), 
-                                                                               0.0);
-
-        public double PageBottomOffset { 
-            get {
-                return (double)GetValue (PageBottomOffsetProperty);
-            }
-            set {
-                SetValue (PageBottomOffsetProperty, value);
-            }
-        }
+        }            
 
         public static readonly BindableProperty IsFullScreenProperty = BindableProperty.Create (
                                                                            "IsFullScreen", 

@@ -17,6 +17,7 @@ namespace SlideOverKit.Droid
 
         IPopupContainerPage _popupBasePage;
         IVisualElementRenderer _popupRenderer;
+        string _currentPopup = null;
 
         public SlideOverKitDroidHandler ()
         {
@@ -79,7 +80,7 @@ namespace SlideOverKit.Droid
                     .SetDuration (menu.AnimationDurationMillisecond)
                     .SetListener (new AnimatorListener (_dragGesture, true))
                     .Start ();     
-            };		
+            };      
 
             if (_popMenuOverlayRenderer == null) {
                 _popMenuOverlayRenderer = RendererFactory.GetRenderer (menu); 
@@ -118,6 +119,8 @@ namespace SlideOverKit.Droid
             if (_popupBasePage == null)
                 return;
             _popupBasePage.ShowPopupAction = (key) => {
+                if (!string.IsNullOrEmpty (_currentPopup))
+                    return;
                 SlidePopupView popup = null;
                 if (!_popupBasePage.PopupViews.ContainsKey (key)) {
                     if (string.IsNullOrEmpty (key) && _popupBasePage.PopupViews.Count == 1)
@@ -126,24 +129,13 @@ namespace SlideOverKit.Droid
                         return;
                 }
 
-                popup = _popupBasePage.PopupViews [key] as SlidePopupView;
-
+                _currentPopup = key;
+                popup = _popupBasePage.PopupViews [_currentPopup] as SlidePopupView;
                 _popupRenderer = RendererFactory.GetRenderer (popup); 
-                var metrics = _pageRenderer.Resources.DisplayMetrics;
-                popup.CalucatePosition ();
-                double x = popup.LeftMargin;
-                double y = popup.TopMargin;
-                double width = popup.WidthRequest <= 0 ? ScreenSizeHelper.ScreenWidth - popup.LeftMargin * 2 : popup.WidthRequest;
-                double height = popup.HeightRequest <= 0 ? ScreenSizeHelper.ScreenHeight - popup.TopMargin * 2 : popup.HeightRequest;
-                popup.Layout (new Xamarin.Forms.Rectangle (x, y, width, height));
-                _popupRenderer.UpdateLayout ();
+                var rect = LayoutPopup ();
+
                 _popupRenderer.ViewGroup.Visibility = ViewStates.Visible;
-                _popupRenderer.ViewGroup.Layout (
-                    (int)(x * metrics.Density), 
-                    (int)(y * metrics.Density), 
-                    (int)((x + width) * metrics.Density), 
-                    (int)((y + height) * metrics.Density));
-                
+                _popupRenderer.ViewGroup.Layout ((int)rect.left, (int)rect.top, (int)rect.right, (int)rect.bottom);
                 ShowBackgroundForPopup (popup.BackgroundViewColor.ToAndroid ());
                 _pageRenderer.ViewGroup.AddView (_popupRenderer.ViewGroup);
                 _pageRenderer.ViewGroup.BringChildToFront (_popupRenderer.ViewGroup);
@@ -158,6 +150,25 @@ namespace SlideOverKit.Droid
             };
         }
 
+        Rect LayoutPopup ()
+        {
+            var popup = _popupBasePage.PopupViews [_currentPopup] as SlidePopupView;
+            var metrics = _pageRenderer.Resources.DisplayMetrics;
+            popup.CalucatePosition ();
+            double x = popup.LeftMargin;
+            double y = popup.TopMargin;
+            double width = popup.WidthRequest <= 0 ? ScreenSizeHelper.ScreenWidth - popup.LeftMargin * 2 : popup.WidthRequest;
+            double height = popup.HeightRequest <= 0 ? ScreenSizeHelper.ScreenHeight - popup.TopMargin * 2 : popup.HeightRequest;
+            popup.Layout (new Xamarin.Forms.Rectangle (x, y, width, height));
+            _popupRenderer.UpdateLayout ();
+            return new Rect {
+                left = x * metrics.Density, 
+                top = y * metrics.Density, 
+                right = (x + width) * metrics.Density, 
+                bottom = (y + height) * metrics.Density
+            };
+        }
+
         void HideBackgroundOverlay ()
         {
             if (_backgroundOverlay != null) {
@@ -169,6 +180,7 @@ namespace SlideOverKit.Droid
 
         void HideBackgroundForPopup ()
         {
+            _currentPopup = null;
             if (_popupRenderer != null) {
                 _pageRenderer.RemoveView (_popupRenderer.ViewGroup);
                 _popupRenderer = null;
@@ -187,7 +199,7 @@ namespace SlideOverKit.Droid
             var menu = _basePage.SlideMenu;
             if (menu == null)
                 return;
-			
+
             double value = (double)(alpha * _basePage.SlideMenu.BackgroundViewColor.A);
             if (_backgroundOverlay != null) {
                 var color = _basePage.SlideMenu.BackgroundViewColor.ToAndroid ();
@@ -195,7 +207,7 @@ namespace SlideOverKit.Droid
                 _backgroundOverlay.SetBackgroundColor (color);
                 return;
             }
-            _backgroundOverlay = new global::Android.Widget.LinearLayout (Forms.Context);		
+            _backgroundOverlay = new global::Android.Widget.LinearLayout (Forms.Context);       
             _pageRenderer.ViewGroup.AddView (_backgroundOverlay);
             _backgroundOverlay.SetBackgroundColor (_basePage.SlideMenu.BackgroundViewColor.ToAndroid ());
 
@@ -237,7 +249,7 @@ namespace SlideOverKit.Droid
         {
             if (_basePage == null)
                 return;
-            
+
             var metrics = _pageRenderer.Resources.DisplayMetrics;
             ScreenSizeHelper.ScreenWidth = w / metrics.Density;
             ScreenSizeHelper.ScreenHeight = h / metrics.Density;
@@ -256,6 +268,10 @@ namespace SlideOverKit.Droid
                         (rect.right - rect.left) / metrics.Density, 
                         (rect.bottom - rect.top) / metrics.Density));
                 }
+            }
+
+            if (!string.IsNullOrEmpty (_currentPopup)) {
+                LayoutPopup ();
             }
 
             if (_backgroundOverlay != null)
@@ -280,7 +296,7 @@ namespace SlideOverKit.Droid
 
         public void OnAnimationCancel (Animator animation)
         {
-            
+
         }
 
         public void OnAnimationEnd (Animator animation)
@@ -293,7 +309,7 @@ namespace SlideOverKit.Droid
 
         public void OnAnimationRepeat (Animator animation)
         {
-            
+
         }
 
         public void OnAnimationStart (Animator animation)

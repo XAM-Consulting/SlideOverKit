@@ -6,7 +6,7 @@ namespace SlideOverKit.MoreSample
 {
     public partial class PopOverWithTriangleView : SlidePopupView
     {
-        public const int iOSTopMargin = 50;
+        public const int iOSTopMargin = 0;
         public const int AndroidTopMargin = 0;
         public const int WinPHoneTopMargin = 10;
 

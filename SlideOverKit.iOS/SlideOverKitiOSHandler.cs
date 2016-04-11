@@ -18,6 +18,7 @@ namespace SlideOverKit.iOS
 
         IPopupContainerPage _popupBasePage;
         UIView _popupNativeView;
+        string _currentPopup = null;
 
         public SlideOverKitiOSHandler ()
         {
@@ -68,6 +69,7 @@ namespace SlideOverKit.iOS
 
         void HideBackgroundForPopup ()
         {
+            _currentPopup = null;
             if (_popupNativeView != null) {
                 _popupNativeView.RemoveFromSuperview ();
                 _popupNativeView = null;
@@ -120,9 +122,9 @@ namespace SlideOverKit.iOS
                 this._popupBasePage.HidePopupAction ();
             }));
                 
-            _backgroundOverlay.Frame = new CGRect (UIApplication.SharedApplication.KeyWindow.Frame.Location, UIApplication.SharedApplication.KeyWindow.Frame.Size);
-            UIApplication.SharedApplication.KeyWindow.AddSubview (_popupNativeView);
-            UIApplication.SharedApplication.KeyWindow.InsertSubviewBelow (_backgroundOverlay, _popupNativeView);   
+            _backgroundOverlay.Frame = new CGRect (_pageRenderer.View.Frame.Location, _pageRenderer.View.Frame.Size);
+            _pageRenderer.View.AddSubview (_popupNativeView);
+            _pageRenderer.View.InsertSubviewBelow (_backgroundOverlay, _popupNativeView);   
         }
 
         void LayoutMenu ()
@@ -171,7 +173,7 @@ namespace SlideOverKit.iOS
                         _dragGesture.DragBegin (p0.X, p0.Y);
 
                     } else if (_panGesture.State == UIGestureRecognizerState.Changed
-                                 && _panGesture.NumberOfTouches == 1) {  
+                               && _panGesture.NumberOfTouches == 1) {  
                         _dragGesture.DragMoving (p0.X, p0.Y);
 
                     } else if (_panGesture.State == UIGestureRecognizerState.Ended) {
@@ -202,6 +204,8 @@ namespace SlideOverKit.iOS
             if (!CheckPageAndPopup ())
                 return;
             _popupBasePage.ShowPopupAction = (key) => {
+                if (!string.IsNullOrEmpty (_currentPopup))
+                    return;
                 SlidePopupView popup = null;
                 if (!_popupBasePage.PopupViews.ContainsKey (key)) {
                     if (string.IsNullOrEmpty (key) && _popupBasePage.PopupViews.Count == 1)
@@ -209,36 +213,16 @@ namespace SlideOverKit.iOS
                     if (popup == null)
                         return;
                 }
-                
-                popup = _popupBasePage.PopupViews [key] as SlidePopupView;
 
-                // This should layout with LeftMargin, TopMargin, WidthRequest and HeightRequest
-                CGRect pos;
-                if (popup.TargetControl == null) {
-                    nfloat x = (nfloat)popup.LeftMargin;
-                    nfloat y = (nfloat)popup.TopMargin;
-                    nfloat width = (nfloat)(popup.WidthRequest <= 0 ? ScreenSizeHelper.ScreenWidth - popup.LeftMargin * 2 : popup.WidthRequest);
-                    nfloat height = (nfloat)(popup.HeightRequest <= 0 ? ScreenSizeHelper.ScreenHeight - popup.TopMargin * 2 : popup.HeightRequest);
-                    pos = new CGRect (x, y, width, height);
-                } else {
-                    var targetControl = RendererFactory.GetRenderer (popup.TargetControl).NativeView;
-                    var targetParentControl = RendererFactory.GetRenderer (popup.TargetControl.ParentView).NativeView;
-                    var center = _pageRenderer.NativeView.ConvertPointToView (targetControl.Center, UIApplication.SharedApplication.KeyWindow);
-
-                    nfloat y = center.Y + targetControl.Frame.Height / 2;
-                    nfloat x = center.X - ((nfloat)popup.WidthRequest) / 2;
-                    nfloat width = (nfloat)popup.WidthRequest;
-                    nfloat height = (nfloat)popup.HeightRequest;
-
-                    pos = new CGRect (x, y, width, height);
-                }
-
-                popup.Layout (pos.ToRectangle ());
+                _currentPopup = key;                
+                popup = _popupBasePage.PopupViews [_currentPopup] as SlidePopupView;
                 _popupNativeView = Platform.CreateRenderer (popup).NativeView;
 
+                CGRect pos = GetPopupPositionAndLayout ();
+                if (pos.IsEmpty)
+                    return;
+                
                 _popupNativeView.Hidden = false;
-                _popupNativeView.Frame = pos;
-                _popupNativeView.SetNeedsLayout ();
 
                 if (_popupNativeView != null) {
                     ShowBackgroundForPopup (popup.BackgroundViewColor.ToUIColor ());
@@ -253,16 +237,41 @@ namespace SlideOverKit.iOS
             };
         }
 
+        CGRect GetPopupPositionAndLayout ()
+        {
+            if (string.IsNullOrEmpty (_currentPopup))
+                return CGRect.Empty;
+            var popup = _popupBasePage.PopupViews [_currentPopup] as SlidePopupView;
+
+            // This should layout with LeftMargin, TopMargin, WidthRequest and HeightRequest
+            CGRect pos;
+            popup.CalucatePosition ();
+            nfloat y = (nfloat)popup.TopMargin;
+            nfloat x = (nfloat)popup.LeftMargin;
+            nfloat width = (nfloat)(popup.WidthRequest <= 0 ? ScreenSizeHelper.ScreenWidth - popup.LeftMargin * 2 : popup.WidthRequest);
+            nfloat height = (nfloat)(popup.HeightRequest <= 0 ? ScreenSizeHelper.ScreenHeight - popup.TopMargin * 2 : popup.HeightRequest);
+ 
+            pos = new CGRect (x, y, width, height);
+            popup.Layout (pos.ToRectangle ());
+
+            _popupNativeView.Frame = pos;
+            _popupNativeView.SetNeedsLayout ();
+
+            return pos;
+
+        }
+
         public void OnElementChanged (VisualElementChangedEventArgs e)
         {
             _basePage = e.NewElement as IMenuContainerPage;
             _popupBasePage = e.NewElement as IPopupContainerPage;
+            LayoutMenu ();
+            LayoutPopup ();
         }
 
         public void ViewDidLayoutSubviews ()
         {
-            LayoutMenu ();
-            LayoutPopup ();
+            GetPopupPositionAndLayout ();
         }
 
         public void ViewDidAppear (bool animated)
@@ -280,16 +289,14 @@ namespace SlideOverKit.iOS
             if (_menuOverlayRenderer != null)
                 _menuOverlayRenderer.NativeView.RemoveFromSuperview ();
             HideBackgroundOverlay ();
+            HideBackgroundForPopup ();
         }
 
 
         public void ViewWillTransitionToSize (CGSize toSize, IUIViewControllerTransitionCoordinator coordinator)
         {
-            // This API sometime cannot return the correct value.
-            // Maybe this is the Xamarin or iOS bug
-            // https://bugzilla.xamarin.com/show_bug.cgi?id=37064
             var menu = _basePage.SlideMenu;
-            double NavigationBarHeight = 0;
+
             // this is used for rotation 
             double bigValue = UIScreen.MainScreen.Bounds.Height > UIScreen.MainScreen.Bounds.Width ? UIScreen.MainScreen.Bounds.Height : UIScreen.MainScreen.Bounds.Width;
             double smallValue = UIScreen.MainScreen.Bounds.Height < UIScreen.MainScreen.Bounds.Width ? UIScreen.MainScreen.Bounds.Height : UIScreen.MainScreen.Bounds.Width;
@@ -297,16 +304,21 @@ namespace SlideOverKit.iOS
                 ScreenSizeHelper.ScreenHeight = bigValue;
                 // this is used for mutiltasking
                 ScreenSizeHelper.ScreenWidth = toSize.Width < smallValue ? toSize.Width : smallValue;
-                NavigationBarHeight = bigValue - toSize.Height;
             } else {
                 ScreenSizeHelper.ScreenHeight = smallValue;
                 ScreenSizeHelper.ScreenWidth = toSize.Width < bigValue ? toSize.Width : bigValue;
-                NavigationBarHeight = smallValue - toSize.Height;
             }
+
+            if (!string.IsNullOrEmpty (_currentPopup)) {                
+                GetPopupPositionAndLayout ();
+
+                // Layout background
+                _backgroundOverlay.Frame = new CGRect (0, 0, ScreenSizeHelper.ScreenWidth, ScreenSizeHelper.ScreenHeight);
+            }
+
+
             if (_dragGesture == null)
                 return;
-            
-            menu.PageBottomOffset = NavigationBarHeight;
 
             _dragGesture.UpdateLayoutSize (menu);
             var rect = _dragGesture.GetHidePosition ();

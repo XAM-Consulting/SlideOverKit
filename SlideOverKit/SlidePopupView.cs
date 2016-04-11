@@ -24,22 +24,7 @@ namespace SlideOverKit
         public Color BackgroundViewColor { 
             get { return (Color)GetValue (BackgroundViewColorProperty); }
             set { SetValue (BackgroundViewColorProperty, value); }
-        }
-
-        //TODO add this these later
-//        public static readonly BindableProperty HaveTriangleProperty = BindableProperty.Create (nameof (HaveTriangle), typeof(bool), typeof(SlidePopupView), default(bool));
-//
-//        public bool HaveTriangle {
-//            get { return (bool)GetValue (HaveTriangleProperty); }
-//            set { SetValue (HaveTriangleProperty, value); }
-//        }
-//
-//        public static readonly BindableProperty CornerRadiusProperty = BindableProperty.Create (nameof (CornerRadius), typeof(int), typeof(SlidePopupView), default(int));
-//
-//        public int CornerRadius {
-//            get { return (int)GetValue (CornerRadiusProperty); }
-//            set { SetValue (CornerRadiusProperty, value); }
-//        }
+        }            
 
         public VisualElement TargetControl { get; set; }
 
@@ -53,10 +38,16 @@ namespace SlideOverKit
 
         internal void CalucatePosition ()
         {
-            if (!(LeftMargin == 0 && TopMargin == 0))
-                return;
+            // In this case, popup layout need Left and top margin, 
+            // we need not to calucate the position, no matter the sreen orientation 
             if (TargetControl == null)
                 return;
+
+            // In this case, we need to calucate the position every time based on the Target control
+            // before we do that we need to set Left and Top Margin as 0
+            LeftMargin = 0;
+            TopMargin = 0;
+
             LeftMargin += TargetControl.X + TargetControl.Width / 2 - this.WidthRequest / 2;
             TopMargin += TargetControl.Y + TargetControl.Height;
             var parent = TargetControl.Parent;
@@ -67,7 +58,7 @@ namespace SlideOverKit
             }
         }
 
-        public SlidePopupView() :base()
+        public SlidePopupView () : base ()
         {
             this.Padding = new Thickness (0);
             this.HasShadow = false;
