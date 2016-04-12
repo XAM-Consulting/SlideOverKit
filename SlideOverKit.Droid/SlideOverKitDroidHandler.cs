@@ -259,14 +259,16 @@ namespace SlideOverKit.Droid
                 if (_dragGesture != null) {
                     _dragGesture.UpdateLayoutSize (menu);
 
-                    // Actully, this cannot Layout the Hide Position
-                    // but it can update the menu Layout, I didn't find a better to do so
                     var rect = _dragGesture.GetHidePosition ();
                     menu.Layout (new Xamarin.Forms.Rectangle (
                         rect.left / metrics.Density, 
                         rect.top / metrics.Density, 
                         (rect.right - rect.left) / metrics.Density, 
                         (rect.bottom - rect.top) / metrics.Density));
+                    if (_popMenuOverlayRenderer != null)
+                        _popMenuOverlayRenderer.UpdateLayout ();
+                    _dragGesture.LayoutHideStatus ();
+                    return;
                 }
             }
 
@@ -302,9 +304,9 @@ namespace SlideOverKit.Droid
         public void OnAnimationEnd (Animator animation)
         {
             if (_isShow)
-                _dragGesture.LayoutShowStatus ();
+                _dragGesture.NeedShowBackgroundView.Invoke (true, 1);
             else
-                _dragGesture.LayoutHideStatus ();
+                _dragGesture.NeedShowBackgroundView.Invoke (false, 0);
         }
 
         public void OnAnimationRepeat (Animator animation)
