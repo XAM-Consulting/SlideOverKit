@@ -16,7 +16,7 @@ namespace SlideOverKit.MoreSample
             InitializeComponent ();
 
             // In this case, you must set both LeftMargin and TopMarin
-            this.LeftMargin = 20;
+            this.LeftMargin = 10;
 
             this.BackgroundViewColor = Color.FromRgba(0,0,0,125);
             // In some small screen Android devices, the menu cannot be layout with full size.

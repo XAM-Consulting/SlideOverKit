@@ -195,7 +195,7 @@
                         <p class="text-muted">Customer size and position menu</p>
                     </div>
                 </div>
-                <!--<div class="col-md-4 col-sm-6 portfolio-item">
+                <div class="col-md-4 col-sm-6 portfolio-item">
                     <a href="#portfolioModal5" class="portfolio-link" data-toggle="modal">
                         <div class="portfolio-hover">
                             <div class="portfolio-hover-content">
@@ -208,7 +208,7 @@
                         <h4>Pop up View</h4>
                         <p class="text-muted">Pop up menu</p>
                     </div>
-                </div>-->
+                </div>
             </div>
         </div>
     </section>
@@ -220,11 +220,11 @@
                 <div class="col-lg-12 text-center">
                     <h2 class="section-heading">Buy</h2>
                     <h3 class="section-subheading text-muted">
-                <p>SlideOverKit can be purchased for 100 US$, please email Michael to purchase.<a href="mailto:michael@xam-consulting.com">michael@xam-consulting.com</a> .</p>
+                <p>SlideOverKit is now free and opensource, we'll be working on SlideOverKit to contribute the community. <a href="mailto:michael@xam-consulting.com">michael@xam-consulting.com</a> .</p>
                 <br>
-                <strong>You can still get started without buying</strong><br><br>
-                <a href="SlideOverKitSample.zip" class="page-scroll btn btn-xl">Samples as zip</a>
-                <a href="https://github.com/XAM-Consulting/SlideOverKitSample" class="page-scroll btn btn-xl">Samples on github repo</a>
+                <strong>Get Started</strong><br><br>
+                <a href="https://github.com/XAM-Consulting/SlideOverKit" class="page-scroll btn btn-xl">Source code</a>
+                <a href="https://github.com/XAM-Consulting/SlideOverKit/tree/master/SlideOverKitMoreSamples" class="page-scroll btn btn-xl">Samples on github repo</a>
 
                 </h3>
                 </div>
@@ -239,8 +239,6 @@
             <div class="row">
                 <div class="col-lg-12 text-center">
                     <h2 class="section-heading">Documents</h2>
-                <a href="SlideOverKitSample.zip" class="page-scroll btn btn-xl">Samples as zip</a>
-                <a href="https://github.com/XAM-Consulting/SlideOverKitSample" class="page-scroll btn btn-xl">Samples on github repo</a>
                 </div>
             </div>
             <div class="modal-body">
@@ -252,7 +250,7 @@
 
                 <p>There are few interesting properties you need to set before using SlideMenuView.</p>
                 <h4>MenuOrientations</h4>
-                <p>This property is used for setting menu appearing direction, the default value is from Left to Right. If you want an pop-up view you can set it as PopUpViewFrom*, like PopUpViewFromBottom or PopUpViewFromTop.</p>
+                <p>This property is used for setting menu appearing direction, the default value is from Left to Right. </p>
                 <h4>AnimationDurationMillisecond</h4>
                 <p>This property is used for setting the speed of showing or hiding menu animation. You can set different speed for different platforms like this:</p>
                 <pre class="csharpcode">
@@ -278,28 +276,33 @@
                 <h4>DraggerButtonHeight/DraggerButtonWidth</h4>
                 <p>They are used for setting the drag offset in your menu. You can put the drag image into your menu, and keep the Height/Width are the same with DraggerButtonHeight/DraggerButtonWidth. In this case DraggerButtonHeight is used for menu direction as TopToBottom or BottomToTop, and DraggerButtonWidth used for TopToBottom or BottomToTop directions.</p>
                 <p>Look up the QuickInnerMenu page in sample codes.</p>
-                <h4>Pop up Views</h4>
-                <p>If you want to create a Pop up View, just like the Popovers page in sample codes. You need to set SlideMenuView.MenuOrientations as any one of PopUpViewFromBottom, PopUpViewFromTop, PopUpViewFromLeft and PopUpViewFromRight. If you use Pop up View, you must set LeftMargin and TopMargin.</p>
-                <p>You can follow the Popovers page sample.</p>
                 <h4>Tips</h4>
-                <p>For some small screen Android devices, the MenuView UI cannot be correctly layout, especially for Pop up Views and menu's direction is BottomToTop. In this situation, you may set different values for different platforms.</p>
-                <p>For example, if you set the Pop up View TopMargin is a fix value first, then you find out it too big in Android which the pop up view's Height is too small for the whole view, so you can modify the TopMargin like this:</p>
-                <pre class="csharpcode">
-<span class="kwrd">this</span>.TopMargin = Device.OnPlatform&lt;<span class="kwrd">int</span>&gt; (iOSTopMargin, AndroidTopMargin, WinPHoneTopMargin);</pre>
+                <p>For some small screen Android devices, the MenuView UI cannot be correctly layout, especially for menu's direction is BottomToTop. In this situation, you may set different values for different platforms.</p>             
                 <p>If you BottomToTop menu cannot be fully layout on Android, you can do this:</p>
                 <pre class="csharpcode">
 <span class="kwrd">if</span> (Device.OS == TargetPlatform.Android)
     <span class="kwrd">this</span>.HeightRequest += 50;</pre>
-                <h4>PageBottomOffset</h4>
-                <p>Generally speaking, you will not use this property in your project, but in some situations, you need to adjust the menu's bottom's position. For example, if your menu is from BottomToTop, not full screen, and your page has a navigation bar. You will find that the menu is covered a little by the screen bottom. The easier way you can increase the HeightRequest, if you don't want to do it you can set the PageBottomOffset. But you need to consider the different platforms and different screen sizes, it will be hard to find a correct value for all situations, but at least you can modify it for adjust position a little.</p>
-                </div>
+
+            </div>
+            <div class="modal-body"> 
+                <h2>Pop up Views</h2>
+                <p>In SlideOverKit, you can add two more SlidePopupViews into one single page. To make the difference, you need to set a key for each SlidePopupViews like</p>
+                <pre class="csharpcode">
+            <span class="kwrd">this</span>.PopupViews.Add (<span class="str">"FirstPopup"</span>, <span class="kwrd">new</span> PopOverView ());
+            <span class="kwrd">this</span>.PopupViews.Add (<span class="str">"SecondPopup"</span>, <span class="kwrd">new</span> PopOverWithTriangleView ());</pre>
+                <p>The container page must be MenuContainerPage or IPopupContainerPage, you need to call ShowPopup(name) and HidePopup() to show or hide Pop up views</p>
+                <p>You can anchor SlidePopupView to a specified control, we used attached property to do this. You can binding it in C# code like</p>
+                <pre class="csharpcode">
+            PopupViewAttached.SetTarget (button, <span class="str">"FirstPopup"</span>);</pre>
+                <p>If you set a target control to SlidePopupView, you must set SlidePopupView height and width request</p>
+                <p>If you didn't set the target control, you must set left and top margin, it will works as a whole page pop up</p>
+                <p>You can follow the Popovers page sample.</p>
+            </div>
             <div class="modal-body">
                 <h2>Inherit</h2>
-                <p>The page which contains SlideMenuView must inherit from MenuContainerPage or IMenuContainerPage. Your page can inherit from MenuContainerPage, so that you can just set SlideMenuView property and it will get work.</p>
+                <p>The page which contains SlideMenuView must inherit from MenuContainerPage or IMenuContainerPage(SlidePopupView need IPopupContainerPage). Your page can inherit from MenuContainerPage, so that you can just set SlideMenuView property and it will get work.</p>
                 <p>If your page need to inherit from other base pages in your solution, you must implement IMenuContainerPage interface and you need to create the renderer pages for each platforms. It won't too hard, just copy codes from sample, you can follow the SlideDownMenuPage page in sample code to do this.</p>
-            </div>
-            <a href="SlideOverKitSample.zip" class="page-scroll btn btn-xl">Samples as zip</a>
-                <a href="https://github.com/XAM-Consulting/SlideOverKitSample" class="page-scroll btn btn-xl">Samples on github repo</a>
+            </div>           
             <div class="modal-body">
                 <h2>FAQs</h2>
                 <h4>Does SlideOverKit support Windows phone platform?</h4>
@@ -374,9 +377,7 @@
                 </div>
                 <div class="col-md-4">
                     <ul class="list-inline social-buttons">
-                        <li><a href="https://github.com/XAM-Consulting/SlideOverKitSample"><i class="fa fa-github"></i></a>
-                        </li>
-                        <li><a href="#"><i class="fa fa-nugit"></i></a>
+                        <li><a href="https://github.com/XAM-Consulting/SlideOverKit"><i class="fa fa-github"></i></a>
                         </li>
                     </ul>
                 </div>
@@ -693,34 +694,35 @@
                             </div>
                             <h2>Code snippets</h2>
                             <pre class="csharpcode">
-<span class="kwrd">public</span> <span class="kwrd">const</span> <span class="kwrd">int</span> iOSTopMargin = 100;
-<span class="kwrd">public</span> <span class="kwrd">const</span> <span class="kwrd">int</span> AndroidTopMargin = 30;
-<span class="kwrd">public</span> <span class="kwrd">const</span> <span class="kwrd">int</span> WinPHoneTopMargin = 100;
+    <span class="kwrd">public</span> <span class="kwrd">partial</span> <span class="kwrd">class</span> PopOverWithTriangleView : SlidePopupView
+    {
+        <span class="kwrd">public</span> <span class="kwrd">const</span> <span class="kwrd">int</span> iOSTopMargin = 0;
+        <span class="kwrd">public</span> <span class="kwrd">const</span> <span class="kwrd">int</span> AndroidTopMargin = 0;
+        <span class="kwrd">public</span> <span class="kwrd">const</span> <span class="kwrd">int</span> WinPHoneTopMargin = 10;
 
-<span class="kwrd">public</span> PopOverView ()
-{
-    InitializeComponent ();
-    <span class="kwrd">this</span>.BackgroundColor = Color.White;
 
-    <span class="rem">// In this case, you must set both LeftMargin and TopMarin</span>
-    <span class="kwrd">this</span>.LeftMargin = 10;
+        <span class="kwrd">public</span> PopOverWithTriangleView ()
+        {
+            InitializeComponent ();
 
-    <span class="rem">// In some small screen Android devices, the menu cannot be layout with full size.</span>
-    <span class="rem">// In this case, we just set LeftMargin and TopMargin,</span>
-    <span class="rem">// you do not need to set the HeightRequest or WidthRequest, as they are no effect in Pop up View.</span>
-    <span class="rem">// If the view is too small for Android devices, we can reduce the TopMargin.</span>
-    <span class="kwrd">this</span>.TopMargin = Device.OnPlatform&lt;<span class="kwrd">int</span>&gt; (iOSTopMargin, AndroidTopMargin, WinPHoneTopMargin);
+            <span class="rem">// In this case, you must set both LeftMargin and TopMarin</span>
+            <span class="kwrd">this</span>.LeftMargin = 10;
 
-    <span class="rem">// We can set the PopUpView coming directions.</span>
-    <span class="kwrd">this</span>.MenuOrientations = MenuOrientation.PopUpViewFromBottom;
+            <span class="kwrd">this</span>.BackgroundViewColor = Color.FromRgba(0,0,0,125);
+            <span class="rem">// In some small screen Android devices, the menu cannot be layout with full size.</span>
+            <span class="rem">// In this case, we just set LeftMargin and TopMargin,</span>
+            <span class="rem">// you do not need to set the HeightRequest or WidthRequest, as they are no effect in Pop up View.</span>
+            <span class="rem">// If the view is too small for Android devices, we can reduce the TopMargin.</span>
+            <span class="kwrd">this</span>.TopMargin = Device.OnPlatform&lt;<span class="kwrd">int</span>&gt; (iOSTopMargin, AndroidTopMargin, WinPHoneTopMargin);
 
-    <span class="rem">// The menu will hide without animation, </span>
-    <span class="rem">// If you want to have the animation, you can call the MenuContainerPage.HideMenu(), </span>
-    <span class="rem">// But you cannot call it from this View, cause of cycle references, you can sent a message to ContainerPage</span>
-    DoneButton.Clicked += (<span class="kwrd">object</span> sender, EventArgs e) =&gt; {
-        <span class="kwrd">this</span>.HideWithoutAnimations ();
-    };
-}</pre>
+           
+            <span class="rem">// The menu will hide without animation, </span>
+            <span class="rem">// If you want to have the animation, you can call the MenuContainerPage.HideMenu(), </span>
+            <span class="rem">// But you cannot call it from this View, cause of cycle references, you can sent a message to ContainerPage</span>
+            DoneButton.Clicked += (<span class="kwrd">object</span> sender, EventArgs e) =&gt; {
+                <span class="kwrd">this</span>.HideMySelf ();
+            };
+        }</pre>
                             <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i> Close Project</button>
                         </div>
                     </div>
