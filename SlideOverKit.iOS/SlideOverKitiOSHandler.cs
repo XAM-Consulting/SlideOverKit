@@ -3,6 +3,7 @@ using Xamarin.Forms.Platform.iOS;
 using UIKit;
 using CoreGraphics;
 using Xamarin.Forms;
+using System.Linq;
 
 namespace SlideOverKit.iOS
 {
@@ -222,14 +223,19 @@ namespace SlideOverKit.iOS
 
                 if (_popupNativeView != null) {
                     ShowBackgroundForPopup (popup.BackgroundViewColor.ToUIColor ());
+                    popup.IsShown = true;
                 }
                 popup.HideMySelf = () => {
                     HideBackgroundForPopup ();
+                    popup.IsShown = false;
                 };
             };
 
             _popupBasePage.HidePopupAction = () => {
                 HideBackgroundForPopup ();
+                var popup = _popupBasePage.PopupViews.Values.Where (o => o.IsShown).FirstOrDefault ();
+                if (popup != null)
+                    popup.IsShown = false;
             };
         }
 

@@ -8,7 +8,7 @@ namespace SlideOverKit.MoreSample
     {
         // If your page cannot inheirt from the MenuContainerPage.
         // You can implement the IMenuContainerPage interface.
-        // Overwrite these properties       
+        // Overwrite these properties
         public Action HideMenuAction {            
             get;
             set;
@@ -27,7 +27,7 @@ namespace SlideOverKit.MoreSample
         public SlideDownMenuPage ()
         {
             Content = new StackLayout {
-                VerticalOptions= LayoutOptions.Center,
+                VerticalOptions = LayoutOptions.Center,
                 HorizontalOptions = LayoutOptions.Center,
                 Children = {
                     new Label { Text = "Click the button in top right" }
@@ -36,9 +36,12 @@ namespace SlideOverKit.MoreSample
 
             // You can add a ToolBar button to show the Menu.
             this.ToolbarItems.Add (new ToolbarItem {
-                Command = new Command(() => {
-                    if (ShowMenuAction != null)
-                        ShowMenuAction ();
+                Command = new Command (() => {
+                    if (this.SlideMenu.IsShown) {
+                        HideMenuAction?.Invoke ();
+                    } else {
+                        ShowMenuAction?.Invoke ();
+                    }
                 }),
                 Icon = "Settings.png",
                 Text = "Settings",

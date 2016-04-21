@@ -63,6 +63,8 @@ namespace SlideOverKit
             this.Padding = new Thickness (0);
             this.HasShadow = false;
         }
+
+        public bool IsShown { get; internal set; }
     }
 }
 

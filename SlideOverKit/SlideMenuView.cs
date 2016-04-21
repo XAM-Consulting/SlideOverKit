@@ -51,51 +51,6 @@ namespace SlideOverKit
             }
         }
 
-        public static readonly BindableProperty RightMarginProperty = BindableProperty.Create (
-            "RightMargin",
-            typeof(double),
-            typeof(SlideMenuView),
-            0.0);
-
-        public double RightMargin { 
-            get {
-                return (double)GetValue (RightMarginProperty);
-            }
-            set {
-                SetValue (RightMarginProperty, value);
-            }
-        }
-
-        public static readonly BindableProperty UseRightMarginProperty = BindableProperty.Create (
-            "UseRightMargin",
-            typeof(bool),
-            typeof(SlideMenuView),
-            false);
-
-        public bool UseRightMargin { 
-            get {
-                return (bool)GetValue (UseRightMarginProperty);
-            }
-            set {
-                SetValue (UseRightMarginProperty, value);
-            }
-        }
-
-        public static readonly BindableProperty UseLeftMarginProperty = BindableProperty.Create (
-            "UseLeftMargin",
-            typeof(bool),
-            typeof(SlideMenuView),
-            false);
-
-        public bool UseLeftMargin { 
-            get {
-                return (bool)GetValue (UseLeftMarginProperty);
-            }
-            set {
-                SetValue (UseLeftMarginProperty, value);
-            }
-        }
-
         public static readonly BindableProperty TopMarginProperty = BindableProperty.Create (
                                                                         "TopMargin",
                                                                         typeof(double),
@@ -139,7 +94,7 @@ namespace SlideOverKit
             set {
                 SetValue (DraggerButtonWidthProperty, value);
             }
-        }            
+        }
 
         public static readonly BindableProperty IsFullScreenProperty = BindableProperty.Create (
                                                                            "IsFullScreen", 
@@ -188,11 +143,22 @@ namespace SlideOverKit
 
         internal Action HideEvent { get; set; }
 
-        public void HideWithoutAnimations  ()
+        public void HideWithoutAnimations ()
         {
             if (HideEvent != null)
                 HideEvent ();
         }
+
+        public bool IsShown {
+            get { 
+                if (GetIsShown == null)
+                    return false;
+                else
+                    return GetIsShown ();
+            }
+        }
+
+        internal Func<bool> GetIsShown { get; set; }
 
     }
 }

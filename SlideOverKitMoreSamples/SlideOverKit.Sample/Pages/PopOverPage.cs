@@ -28,7 +28,11 @@ namespace SlideOverKit.MoreSample
                     
             this.ToolbarItems.Add (new ToolbarItem {
                 Command = new Command (() => {
-                    this.ShowPopup ("SecondPopup");
+                    if (this.PopupViews ["SecondPopup"].IsShown) {
+                        this.HidePopup ();
+                    } else {
+                        this.ShowPopup ("SecondPopup");
+                    }
                 }),
                 Icon = "Filter_Blue.png",
                 Text = "Filter",

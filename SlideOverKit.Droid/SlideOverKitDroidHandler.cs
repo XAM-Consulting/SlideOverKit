@@ -3,6 +3,7 @@ using Xamarin.Forms.Platform.Android;
 using Xamarin.Forms;
 using Android.Views;
 using Android.Animation;
+using System.Linq;
 
 namespace SlideOverKit.Droid
 {
@@ -140,13 +141,19 @@ namespace SlideOverKit.Droid
                 _pageRenderer.ViewGroup.AddView (_popupRenderer.ViewGroup);
                 _pageRenderer.ViewGroup.BringChildToFront (_popupRenderer.ViewGroup);
 
+                popup.IsShown = true;
+
                 popup.HideMySelf = () => {
                     HideBackgroundForPopup ();
+                    popup.IsShown = false;
                 };
             };
 
             _popupBasePage.HidePopupAction = () => {
                 HideBackgroundForPopup ();
+                var popup = _popupBasePage.PopupViews.Values.Where (o => o.IsShown).FirstOrDefault ();
+                if (popup != null)
+                    popup.IsShown = false;
             };
         }
 
@@ -211,9 +218,8 @@ namespace SlideOverKit.Droid
             _pageRenderer.ViewGroup.AddView (_backgroundOverlay);
             _backgroundOverlay.SetBackgroundColor (_basePage.SlideMenu.BackgroundViewColor.ToAndroid ());
 
-            _backgroundOverlay.Touch += (object sender, Android.Views.View.TouchEventArgs e) => {
-                _basePage.HideMenuAction ();
-            };
+            _backgroundOverlay.Touch -= HideMenu;
+            _backgroundOverlay.Touch += HideMenu;
             var metrics = _pageRenderer.Resources.DisplayMetrics;
             _backgroundOverlay.Layout (
                 0, 
@@ -223,6 +229,16 @@ namespace SlideOverKit.Droid
 
         }
 
+        void HideMenu (object sender, Android.Views.View.TouchEventArgs e)
+        {
+            _basePage.HideMenuAction ();
+        }
+
+        void HidePopup (object sender, Android.Views.View.TouchEventArgs e)
+        {
+            _popupBasePage.HidePopupAction ();
+        }
+            
         void ShowBackgroundForPopup (Android.Graphics.Color color)
         {
             if (_popupBasePage == null)
@@ -233,9 +249,9 @@ namespace SlideOverKit.Droid
             _pageRenderer.ViewGroup.AddView (_backgroundOverlay);
             _backgroundOverlay.SetBackgroundColor (color);
 
-            _backgroundOverlay.Touch += (object sender, Android.Views.View.TouchEventArgs e) => {
-                _popupBasePage.HidePopupAction ();
-            };
+            _backgroundOverlay.Touch -= HidePopup;
+            _backgroundOverlay.Touch += HidePopup;
+
             var metrics = _pageRenderer.Resources.DisplayMetrics;
             _backgroundOverlay.Layout (
                 0, 
