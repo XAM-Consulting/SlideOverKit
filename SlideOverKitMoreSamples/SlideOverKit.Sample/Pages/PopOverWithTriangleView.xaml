@@ -1,10 +1,9 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<t:SlideMenuView xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:t="clr-namespace:SlideOverKit" x:Class="SlideOverKit.MoreSample.PopOverWithTriangleView"
-	BackgroundColor="Transparent">
+<t:SlidePopupView xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:t="clr-namespace:SlideOverKit" x:Class="SlideOverKit.MoreSample.PopOverWithTriangleView">
 	<Grid RowSpacing="0" Padding="0">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="10" />
-			<RowDefinition Height="Auto" />
+			<RowDefinition Height="*" />
 		</Grid.RowDefinitions>
 		<RelativeLayout Padding="0">
 			<Image Source="UpIcon.png" 
@@ -16,7 +15,7 @@
 					RelativeLayout.XConstraint=
 		                 "{ConstraintExpression Type=RelativeToParent, 
                                         Property=Width,
-                                        Factor=0.9}"
+                                        Factor=0.92}"
                     RelativeLayout.HeightConstraint=
                  		 "{ConstraintExpression Type=RelativeToParent, 
                                        	Property=Height,
@@ -26,7 +25,7 @@
 		<StackLayout BackgroundColor="White" Padding="15,10,15,30" Spacing="20" Grid.Row="1" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">			
 			<Label HeightRequest="160" Text="Build some Awesome SlideOver's" FontSize="24" XAlign="Center" />
 			<Image HeightRequest="100" Source="xamconsulting.png" ></Image>
-			<Button HeightRequest="30" x:Name="DoneButton" Text="Close"  />
+			<Button HeightRequest="60" x:Name="DoneButton" Text="Close"  />
 		</StackLayout>
 	</Grid>
-</t:SlideMenuView>
+</t:SlidePopupView>

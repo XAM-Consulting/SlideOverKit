@@ -68,12 +68,6 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="Xamarin.iOS" />
-    <Reference Include="SlideOverKit">
-      <HintPath>..\packages\SlideOverKit.1.0.0\lib\Xamarin.iOS10\SlideOverKit.dll</HintPath>
-    </Reference>
-    <Reference Include="SlideOverKit.iOS">
-      <HintPath>..\packages\SlideOverKit.1.0.0\lib\Xamarin.iOS10\SlideOverKit.iOS.dll</HintPath>
-    </Reference>
     <Reference Include="Calabash">
       <HintPath>..\..\packages\Xamarin.TestCloud.Agent.0.19.0\lib\Xamarin.iOS10\Calabash.dll</HintPath>
       <Private>False</Private>

@@ -11,10 +11,6 @@ namespace SlideOverKit
         BottomToTop,
         LeftToRight,
         RightToLeft,
-        PopUpViewFromBottom,
-        PopUpViewFromTop,
-        PopUpViewFromLeft,
-        PopUpViewFromRight
     }
 
     public class SlideMenuView : ContentView
@@ -52,51 +48,6 @@ namespace SlideOverKit
             }
             set {
                 SetValue (LeftMarginProperty, value);
-            }
-        }
-
-        public static readonly BindableProperty RightMarginProperty = BindableProperty.Create (
-            "RightMargin",
-            typeof(double),
-            typeof(SlideMenuView),
-            0.0);
-
-        public double RightMargin { 
-            get {
-                return (double)GetValue (RightMarginProperty);
-            }
-            set {
-                SetValue (RightMarginProperty, value);
-            }
-        }
-
-        public static readonly BindableProperty UseRightMarginProperty = BindableProperty.Create (
-            "UseRightMargin",
-            typeof(bool),
-            typeof(SlideMenuView),
-            false);
-
-        public bool UseRightMargin { 
-            get {
-                return (bool)GetValue (UseRightMarginProperty);
-            }
-            set {
-                SetValue (UseRightMarginProperty, value);
-            }
-        }
-
-        public static readonly BindableProperty UseLeftMarginProperty = BindableProperty.Create (
-            "UseLeftMargin",
-            typeof(bool),
-            typeof(SlideMenuView),
-            false);
-
-        public bool UseLeftMargin { 
-            get {
-                return (bool)GetValue (UseLeftMarginProperty);
-            }
-            set {
-                SetValue (UseLeftMarginProperty, value);
             }
         }
 
@@ -142,22 +93,6 @@ namespace SlideOverKit
             }
             set {
                 SetValue (DraggerButtonWidthProperty, value);
-            }
-        }
-
-
-        public static readonly BindableProperty PageBottomOffsetProperty = BindableProperty.Create (
-                                                                               "PageBottomOffset", 
-                                                                               typeof(double), 
-                                                                               typeof(SlideMenuView), 
-                                                                               0.0);
-
-        public double PageBottomOffset { 
-            get {
-                return (double)GetValue (PageBottomOffsetProperty);
-            }
-            set {
-                SetValue (PageBottomOffsetProperty, value);
             }
         }
 
@@ -208,11 +143,22 @@ namespace SlideOverKit
 
         internal Action HideEvent { get; set; }
 
-        public void HideWithoutAnimations  ()
+        public void HideWithoutAnimations ()
         {
             if (HideEvent != null)
                 HideEvent ();
         }
+
+        public bool IsShown {
+            get { 
+                if (GetIsShown == null)
+                    return false;
+                else
+                    return GetIsShown ();
+            }
+        }
+
+        internal Func<bool> GetIsShown { get; set; }
 
     }
 }

@@ -30,10 +30,10 @@ namespace SlideOverKit
             _bottomMin = view.DraggerButtonHeight * _density;
             if (view.MenuOrientations == MenuOrientation.BottomToTop) {
                 _isToptoBottom = false;
-                _topMax = (ScreenSizeHelper.ScreenHeight - view.PageBottomOffset - view.DraggerButtonHeight) * _density;
-                _topMin = (ScreenSizeHelper.ScreenHeight - view.PageBottomOffset - view.HeightRequest) * _density;
-                _bottomMax = (ScreenSizeHelper.ScreenHeight - view.PageBottomOffset + view.HeightRequest - view.DraggerButtonHeight) * _density;
-                _bottomMin = (ScreenSizeHelper.ScreenHeight - view.PageBottomOffset) * _density;
+                _topMax = (ScreenSizeHelper.ScreenHeight - view.DraggerButtonHeight) * _density;
+                _topMin = (ScreenSizeHelper.ScreenHeight - view.HeightRequest) * _density;
+                _bottomMax = (ScreenSizeHelper.ScreenHeight + view.HeightRequest - view.DraggerButtonHeight) * _density;
+                _bottomMin = ScreenSizeHelper.ScreenHeight * _density;
             }
             if (!view.IsFullScreen) {
                 _left = view.LeftMargin * _density;
@@ -138,7 +138,8 @@ namespace SlideOverKit
         }
 
         public Rect GetShowPosition ()
-        {			
+        {
+            _willShown = false;
             return new Rect () { 
                 left = _left, 
                 top = _isToptoBottom ? _topMax : _topMin, 
@@ -149,6 +150,7 @@ namespace SlideOverKit
 
         public Rect GetHidePosition ()
         {
+            _willShown = true;
             return new Rect () { 
                 left = _left, 
                 top = _isToptoBottom ? _topMin : _topMax,

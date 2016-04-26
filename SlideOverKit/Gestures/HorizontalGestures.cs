@@ -136,7 +136,8 @@ namespace SlideOverKit
         }
 
         public Rect GetShowPosition ()
-        {			
+        {	
+            _willShown = false;
             return new Rect () { 
                 left = _isLeftToRight ? _leftMax : _leftMin,
                 top = _top,
@@ -147,6 +148,7 @@ namespace SlideOverKit
 
         public Rect GetHidePosition ()
         {
+            _willShown = true;
             return new Rect () { 
                 left = _isLeftToRight ? _leftMin : _leftMax,
                 top = _top, 
