@@ -159,7 +159,6 @@ namespace SlideOverKit
         }
 
         internal Func<bool> GetIsShown { get; set; }
-
     }
 }
 

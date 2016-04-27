@@ -162,7 +162,8 @@ namespace SlideOverKit.iOS
             };
 
             if (_menuOverlayRenderer == null) {
-                _menuOverlayRenderer = RendererFactory.GetRenderer (menu);
+                _menuOverlayRenderer = Platform.CreateRenderer (menu);
+                Platform.SetRenderer (menu, _menuOverlayRenderer);
 
                 _panGesture = new UIPanGestureRecognizer (() => {
                     var p0 = _panGesture.LocationInView (_pageRenderer.View);
@@ -213,7 +214,9 @@ namespace SlideOverKit.iOS
 
                 _currentPopup = key;                
                 popup = _popupBasePage.PopupViews [_currentPopup] as SlidePopupView;
-                _popupNativeView = Platform.CreateRenderer (popup).NativeView;
+                var renderer = Platform.CreateRenderer(popup);
+                Platform.SetRenderer(popup, renderer);
+                _popupNativeView = renderer.NativeView;
 
                 CGRect pos = GetPopupPositionAndLayout ();
                 if (pos.IsEmpty)

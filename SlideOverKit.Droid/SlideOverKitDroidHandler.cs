@@ -84,7 +84,9 @@ namespace SlideOverKit.Droid
             };      
 
             if (_popMenuOverlayRenderer == null) {
-                _popMenuOverlayRenderer = RendererFactory.GetRenderer (menu); 
+                _popMenuOverlayRenderer = Platform.CreateRenderer (menu);
+                Platform.SetRenderer (menu, _popupRenderer);
+
                 var metrics = _pageRenderer.Resources.DisplayMetrics;
                 var rootView = _popMenuOverlayRenderer.ViewGroup;
                 if (_popMenuOverlayRenderer is SlideMenuDroidRenderer) {
@@ -132,7 +134,9 @@ namespace SlideOverKit.Droid
 
                 _currentPopup = key;
                 popup = _popupBasePage.PopupViews [_currentPopup] as SlidePopupView;
-                _popupRenderer = RendererFactory.GetRenderer (popup); 
+                _popupRenderer = Platform.CreateRenderer (popup);
+                Platform.SetRenderer (popup, _popupRenderer);
+
                 var rect = LayoutPopup ();
 
                 _popupRenderer.ViewGroup.Visibility = ViewStates.Visible;

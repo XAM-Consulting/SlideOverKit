@@ -12,7 +12,19 @@ namespace SlideOverKit
             PopupViews = new Dictionary<string, SlidePopupView> ();
         }
 
-        public SlideMenuView SlideMenu { get; set; }
+        SlideMenuView slideMenu;
+        public SlideMenuView SlideMenu {
+            get {
+                return slideMenu;
+            }
+            set {
+                if (slideMenu != null)
+                    slideMenu.Parent = null;
+                slideMenu = value;
+                if (slideMenu != null)
+                    slideMenu.Parent = this;
+            }
+        }
 
         public Action ShowMenuAction { get; set; }
 
