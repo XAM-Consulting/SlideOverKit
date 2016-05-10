@@ -26,3 +26,4 @@ using System.Runtime.CompilerServices;
 
 [assembly:InternalsVisibleTo("SlideOverKit.Droid")]
 [assembly:InternalsVisibleTo("SlideOverKit.iOS")]
+[assembly: InternalsVisibleTo("SlideOverKit.UWP")]
