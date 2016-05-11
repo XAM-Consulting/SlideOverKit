@@ -65,9 +65,17 @@ namespace SlideOverKit.UWP
 
         private void NewElement_Disappearing(object sender, EventArgs e)
         {
-            if (_popMenuOverlayRenderer != null && _mainCanvas != null)
+            if (_mainCanvas != null)
             {
-                _mainCanvas.Children.Remove(_popMenuOverlayRenderer);
+                if (_popMenuOverlayRenderer != null)
+                {
+                    _mainCanvas.Children.Remove(_popMenuOverlayRenderer);
+                }
+                if (_backgroundOverlay != null)
+                {
+                    _mainCanvas.Children.Remove(_backgroundOverlay);
+                    _backgroundOverlay = null;
+                }
             }
         }
 
@@ -402,29 +410,30 @@ namespace SlideOverKit.UWP
 
         public void Dispose()
         {
-            if (_popMenuOverlayRenderer != null)
+            if (_mainCanvas != null)
             {
-                _popMenuOverlayRenderer.PointerPressed -= menuOverlayRenderer_PointerPressed;
-                _popMenuOverlayRenderer.PointerMoved -= menuOverlayRenderer_PointerMoved;
-                _popMenuOverlayRenderer.PointerReleased -= menuOverlayRenderer_PointerReleased;
-                _popMenuOverlayRenderer.PointerExited -= menuOverlayRenderer_PointerReleased;
-                if (_mainCanvas != null)
+                if (_popMenuOverlayRenderer != null)
                 {
+                    _popMenuOverlayRenderer.PointerPressed -= menuOverlayRenderer_PointerPressed;
+                    _popMenuOverlayRenderer.PointerMoved -= menuOverlayRenderer_PointerMoved;
+                    _popMenuOverlayRenderer.PointerReleased -= menuOverlayRenderer_PointerReleased;
+                    _popMenuOverlayRenderer.PointerExited -= menuOverlayRenderer_PointerReleased;
                     _mainCanvas.Children.Remove(_popMenuOverlayRenderer);
-                    _mainCanvas.SizeChanged -= mainCanvas_SizeChanged;
                 }
+                if (_backgroundOverlay != null)
+                {
+                    _backgroundOverlay.Tapped -= _backgroundOverlay_Tapped;
+                    _mainCanvas.Children.Remove(_backgroundOverlay);
+                }
+                if (_popupRenderer != null)
+                {
+                    _mainCanvas.Children.Remove(_popupRenderer);
+                }
+                _mainCanvas.SizeChanged -= mainCanvas_SizeChanged;
             }
             _mainCanvas = null;
             _popMenuOverlayRenderer = null;
-
-            if (_popupRenderer != null)
-            {
-                if (_mainCanvas != null)
-                {
-                    _mainCanvas.Children.Remove(_popupRenderer);
-                    _mainCanvas.SizeChanged -= mainCanvas_SizeChanged;
-                }
-            }
+            _backgroundOverlay = null;
             _popupRenderer = null;
         }
     }

@@ -8,14 +8,13 @@
     <owners>Michael Ridland @ XAM Consulting</owners>
     <projectUrl>http://www.xam-consulting.com/slideoverkit-xamarin-forms/</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Easily Create Awesome Slideover's in Xamarin.Forms</description>    
+    <description>Easily Create Awesome Slideover's in Xamarin.Forms</description>
     <tags>Xamarin, Xamarin.Forms, SlideOverKit</tags>
   </metadata>
   <files>
-        <file src="SlideOverKit/bin/Release/SlideOverKit*.*" target="lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10" />
-
-    	<file src="SlideOverKit.iOS/bin/Release/SlideOverKit*.*" target="lib\Xamarin.iOS10" />
-
-    	<file src="SlideOverKit.Droid/bin/Release/SlideOverKit*.*" target="lib\MonoAndroid10" />
-    </files>
+    <file src="SlideOverKit/bin/Release/SlideOverKit*.*" target="lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10" />
+    <file src="SlideOverKit.iOS/bin/Release/SlideOverKit*.*" target="lib\Xamarin.iOS10" />
+    <file src="SlideOverKit.Droid/bin/Release/SlideOverKit*.*" target="lib\MonoAndroid10" />
+    <file src="SlideOverKit.UWP/bin/Release/SlideOverKit*.*" target="lib\uap10.0" />
+  </files>
 </package>
