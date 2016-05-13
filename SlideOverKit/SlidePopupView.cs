@@ -26,6 +26,20 @@ namespace SlideOverKit
             set { SetValue (BackgroundViewColorProperty, value); }
         }            
 
+        public static readonly BindableProperty AdjustXProperty = BindableProperty.Create (nameof (AdjustX), typeof(double), typeof(SlidePopupView), default(double));
+
+        public double AdjustX {
+            get { return (double)GetValue (AdjustXProperty); }
+            set { SetValue (AdjustXProperty, value); }
+        }
+
+        public static readonly BindableProperty AdjustYProperty = BindableProperty.Create (nameof (AdjustY), typeof(double), typeof(SlidePopupView), default(double));
+
+        public double AdjustY {
+            get { return (double)GetValue (AdjustYProperty); }
+            set { SetValue (AdjustYProperty, value); }
+        }
+
         public VisualElement TargetControl { get; set; }
 
         public Action HideMySelf { get; internal set; }
@@ -56,6 +70,9 @@ namespace SlideOverKit
                 TopMargin += (parent as VisualElement).Y;
                 parent = parent.Parent;
             }
+
+            LeftMargin += AdjustX;
+            TopMargin += AdjustY;
         }
 
         public SlidePopupView () : base ()
