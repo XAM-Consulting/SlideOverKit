@@ -4,6 +4,7 @@ using UIKit;
 using CoreGraphics;
 using Xamarin.Forms;
 using System.Linq;
+using System.Diagnostics;
 
 namespace SlideOverKit.iOS
 {
@@ -122,6 +123,30 @@ namespace SlideOverKit.iOS
             _backgroundOverlay.Frame = new CGRect (_pageRenderer.View.Frame.Location, _pageRenderer.View.Frame.Size);
             _pageRenderer.View.AddSubview (_popupNativeView);
             _pageRenderer.View.InsertSubviewBelow (_backgroundOverlay, _popupNativeView);   
+        }
+
+        Point? RecureFindScrolled(UIView view)
+        {
+            Point? returnSize = null;
+
+            if (view is UIScrollView)
+            {
+                var offset = ((UIScrollView)view).ContentOffset;
+                returnSize = new Point(offset.X, offset.Y);
+            }
+
+            foreach(var sv in view.Subviews)
+            {
+                var size = RecureFindScrolled(sv);
+                if (size.HasValue)
+                {
+                    if (returnSize.HasValue)
+                        returnSize = new Point(returnSize.Value.X + size.Value.X, returnSize.Value.Y + size.Value.Y);
+                    else
+                        returnSize = size;
+                }                    
+            }
+            return returnSize;
         }
 
         void LayoutMenu ()
@@ -256,6 +281,13 @@ namespace SlideOverKit.iOS
             nfloat width = (nfloat)(popup.WidthRequest <= 0 ? ScreenSizeHelper.ScreenWidth - popup.LeftMargin * 2 : popup.WidthRequest);
             nfloat height = (nfloat)(popup.HeightRequest <= 0 ? ScreenSizeHelper.ScreenHeight - popup.TopMargin * 2 : popup.HeightRequest);
  
+            var scrollCounters = RecureFindScrolled(_pageRenderer.View);
+            if (scrollCounters.HasValue)
+            {
+                x -= (nfloat)scrollCounters.Value.X;
+                y -= (nfloat)scrollCounters.Value.Y;
+            }
+
             pos = new CGRect (x, y, width, height);
             popup.Layout (pos.ToRectangle ());
 

@@ -50,20 +50,41 @@ namespace SlideOverKit
                 HideMySelf ();
         }
 
-        internal void CalucatePosition ()
+        internal void CalucatePosition (Point? point = null)
         {
             // In this case, popup layout need Left and top margin, 
             // we need not to calucate the position, no matter the sreen orientation 
             if (TargetControl == null)
                 return;
 
+            if (!point.HasValue)
+            {
+                point = new Point
+                {
+                    X = TargetControl.X,
+                    Y = TargetControl.Y
+                };
+            }
+
             // In this case, we need to calucate the position every time based on the Target control
             // before we do that we need to set Left and Top Margin as 0
             LeftMargin = 0;
             TopMargin = 0;
 
-            LeftMargin += TargetControl.X + TargetControl.Width / 2 - this.WidthRequest / 2;
-            TopMargin += TargetControl.Y + TargetControl.Height;
+            if (this.HorizontalOptions.Alignment == LayoutAlignment.Start)
+                LeftMargin = point.Value.X;
+            else if (this.HorizontalOptions.Alignment == LayoutAlignment.End)
+                LeftMargin += point.Value.X + TargetControl.Width / 2;
+            else 
+                LeftMargin += point.Value.X + TargetControl.Width / 2 - this.WidthRequest / 2;
+
+            if (this.VerticalOptions.Alignment == LayoutAlignment.Start)
+                TopMargin += point.Value.Y;
+            else if (this.VerticalOptions.Alignment == LayoutAlignment.End)
+                TopMargin += point.Value.Y + TargetControl.Height;
+            else
+                TopMargin += point.Value.Y + (TargetControl.Height / 2);
+
             var parent = TargetControl.Parent;
             while (!(parent == null || parent is IPopupContainerPage)) {
                 LeftMargin += (parent as VisualElement).X;
