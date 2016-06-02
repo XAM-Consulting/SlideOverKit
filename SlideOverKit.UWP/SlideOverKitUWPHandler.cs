@@ -56,10 +56,13 @@ namespace SlideOverKit.UWP
 
         private void NewElement_Appearing(object sender, EventArgs e)
         {
-            if (_popMenuOverlayRenderer != null && _mainCanvas != null)
+            if (_mainCanvas == null)
             {
-                if (!_mainCanvas.Children.Contains(_popMenuOverlayRenderer))
-                    _mainCanvas.Children.Add(_popMenuOverlayRenderer);
+                FindRootCanvas(Windows.UI.Xaml.Window.Current.Content);
+            }
+            if (_mainCanvas != null)
+            {
+                AddControlToCanvas();
             }
         }
 
@@ -76,11 +79,14 @@ namespace SlideOverKit.UWP
                     _mainCanvas.Children.Remove(_backgroundOverlay);
                     _backgroundOverlay = null;
                 }
+                _mainCanvas.SizeChanged -= mainCanvas_SizeChanged;
             }
         }
 
         void FindRootCanvas(UIElement root)
         {
+            if (root == null)
+                return;
             if (root is Canvas)
             {
                 _mainCanvas = root as Canvas;
@@ -101,8 +107,7 @@ namespace SlideOverKit.UWP
         bool CheckPageAndMenu()
         {
             if (_basePage != null
-                && _basePage.SlideMenu != null
-                && _mainCanvas != null)
+                && _basePage.SlideMenu != null)
                 return true;
             else
                 return false;
@@ -112,8 +117,7 @@ namespace SlideOverKit.UWP
         {
             if (_popupBasePage != null
                 && _popupBasePage.PopupViews != null
-                && _popupBasePage.PopupViews.Count > 0
-                && _mainCanvas != null)
+                && _popupBasePage.PopupViews.Count > 0)
                 return true;
             else
                 return false;
@@ -264,7 +268,6 @@ namespace SlideOverKit.UWP
                 _popMenuOverlayRenderer.PointerMoved += menuOverlayRenderer_PointerMoved;
                 _popMenuOverlayRenderer.PointerReleased += menuOverlayRenderer_PointerReleased;
                 _popMenuOverlayRenderer.PointerExited += menuOverlayRenderer_PointerReleased;
-                _mainCanvas.SizeChanged += mainCanvas_SizeChanged;
             }
             var rect = _dragGesture.GetHidePosition();
             menu.Layout(new Xamarin.Forms.Rectangle(
@@ -275,9 +278,7 @@ namespace SlideOverKit.UWP
             Canvas.SetLeft(_popMenuOverlayRenderer, rect.left);
             Canvas.SetTop(_popMenuOverlayRenderer, rect.top);
             _popMenuOverlayRenderer.Visibility = menu.IsVisible ? Visibility.Visible : Visibility.Collapsed;
-            _mainCanvas.Children.Add(_popMenuOverlayRenderer);
             _popMenuOverlayRenderer.UpdateLayout();
-            _mainCanvas.UpdateLayout();
         }
 
         private void LayoutPopup()
@@ -312,7 +313,6 @@ namespace SlideOverKit.UWP
 
                     ShowBackgroundForPopup(popup.BackgroundViewColor);
                     popup.IsShown = true;
-                    _mainCanvas.SizeChanged += mainCanvas_SizeChanged;
                 }
 
                 popup.HideMySelf = () =>
@@ -352,6 +352,17 @@ namespace SlideOverKit.UWP
             return true;
         }
 
+        void AddControlToCanvas()
+        {
+            if (_popMenuOverlayRenderer != null)
+                _mainCanvas.Children.Add(_popMenuOverlayRenderer);
+            _mainCanvas.UpdateLayout();
+            _mainCanvas.SizeChanged += mainCanvas_SizeChanged;
+            ScreenSizeHelper.ScreenWidth = _mainCanvas.ActualWidth;
+            ScreenSizeHelper.ScreenHeight = _mainCanvas.ActualHeight;
+            UpdateMenuWithNewSize();
+        }
+
         private void menuOverlayRenderer_PointerReleased(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
         {
             var point = e.GetCurrentPoint(_mainCanvas);
@@ -381,23 +392,9 @@ namespace SlideOverKit.UWP
 
         private void mainCanvas_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            var menu = _basePage.SlideMenu;
             ScreenSizeHelper.ScreenWidth = e.NewSize.Width;
             ScreenSizeHelper.ScreenHeight = e.NewSize.Height;
-            if (menu != null && menu.IsFullScreen)
-            {
-                if (menu.MenuOrientations == MenuOrientation.BottomToTop
-                    || menu.MenuOrientations == MenuOrientation.TopToBottom)
-                    menu.WidthRequest = e.NewSize.Width;
-                if (menu.MenuOrientations == MenuOrientation.LeftToRight
-                    || menu.MenuOrientations == MenuOrientation.RightToLeft)
-                    menu.HeightRequest = e.NewSize.Height;
-                if (_dragGesture != null)
-                {
-                    _dragGesture.UpdateLayoutSize(menu);
-                    _dragGesture.LayoutHideStatus();
-                }
-            }
+            UpdateMenuWithNewSize();
 
             if (!string.IsNullOrEmpty(_currentPopup))
             {
@@ -405,6 +402,28 @@ namespace SlideOverKit.UWP
                 _backgroundOverlay.Width = ScreenSizeHelper.ScreenWidth;
                 _backgroundOverlay.Height = ScreenSizeHelper.ScreenHeight;
 
+            }
+        }
+
+        void UpdateMenuWithNewSize()
+        {
+            var menu = _basePage.SlideMenu;
+            if (menu != null)
+            {
+                if (menu.IsFullScreen)
+                {
+                    if (menu.MenuOrientations == MenuOrientation.BottomToTop
+                        || menu.MenuOrientations == MenuOrientation.TopToBottom)
+                        menu.WidthRequest = ScreenSizeHelper.ScreenWidth;
+                    if (menu.MenuOrientations == MenuOrientation.LeftToRight
+                        || menu.MenuOrientations == MenuOrientation.RightToLeft)
+                        menu.HeightRequest = ScreenSizeHelper.ScreenHeight;
+                }
+                if (_dragGesture != null)
+                {
+                    _dragGesture.UpdateLayoutSize(menu);
+                    _dragGesture.LayoutHideStatus();
+                }
             }
         }
 
