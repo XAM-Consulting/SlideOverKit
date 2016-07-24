@@ -6,7 +6,7 @@ namespace SlideOverKit.iOS
     {
         public static void Init()
         {
-            // Do nothing to solve the iOS side-load issue
+            var mc = new MenuContainerPageiOSRenderer (); //need to do this to or it doesn't work in release 
         }
     }
 }
