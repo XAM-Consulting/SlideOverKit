@@ -167,27 +167,26 @@ namespace SlideOverKit.Droid
             var popup = _popupBasePage.PopupViews [_currentPopup] as SlidePopupView;
             var metrics = _pageRenderer.Resources.DisplayMetrics;
 
-            TypedValue tv = new TypedValue();
-            int actionBarHeight = 0;
-            if (Forms.Context.Theme.ResolveAttribute(Android.Resource.Attribute.ActionBarSize, tv, true))
-            {
-                actionBarHeight = TypedValue.ComplexToDimensionPixelSize(tv.Data, Forms.Context.Resources.DisplayMetrics);
+            Point? targetPoint = null;
+
+            if (popup.TargetControl != null) {
+                TypedValue tv = new TypedValue ();
+                int actionBarHeight = 0;
+                if (Forms.Context.Theme.ResolveAttribute (Android.Resource.Attribute.ActionBarSize, tv, true)) {
+                    actionBarHeight = TypedValue.ComplexToDimensionPixelSize (tv.Data, Forms.Context.Resources.DisplayMetrics);
+                }
+
+                var targetRenderer = Platform.GetRenderer (popup.TargetControl);
+                int [] array = new int [2];
+                targetRenderer.ViewGroup.GetLocationInWindow (array);
+
+                targetPoint = new Point { X = array [0] / metrics.Density, Y = (array [1] / metrics.Density) - (actionBarHeight / metrics.Density) };
             }
-
-            var targetRenderer = Platform.GetRenderer(popup.TargetControl);
-            int[] array = new int[2];
-            targetRenderer.ViewGroup.GetLocationInWindow(array);
-
-            popup.AdjustX = popup.AdjustX / metrics.Density;
-            popup.AdjustY = popup.AdjustY / metrics.Density;
-            popup.CalucatePosition(new Point { X = array[0] / metrics.Density, Y = (array[1] / metrics.Density) - (actionBarHeight / metrics.Density) });
-
+            popup.CalucatePosition (targetPoint);
             double x = popup.LeftMargin;
             double y = popup.TopMargin;
             double width = popup.WidthRequest <= 0 ? ScreenSizeHelper.ScreenWidth - popup.LeftMargin * 2 : popup.WidthRequest;
             double height = popup.HeightRequest <= 0 ? ScreenSizeHelper.ScreenHeight - popup.TopMargin * 2 : popup.HeightRequest;
-
-            System.Diagnostics.Debug.WriteLine($" {x} : {y} "); 
 
             popup.Layout (new Xamarin.Forms.Rectangle (x, y, width, height));
             _popupRenderer.UpdateLayout ();

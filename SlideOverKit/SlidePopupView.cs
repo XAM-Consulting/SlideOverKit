@@ -85,11 +85,17 @@ namespace SlideOverKit
             else
                 TopMargin += point.Value.Y + (TargetControl.Height / 2);
 
-            var parent = TargetControl.Parent;
-            while (!(parent == null || parent is IPopupContainerPage)) {
-                LeftMargin += (parent as VisualElement).X;
-                TopMargin += (parent as VisualElement).Y;
-                parent = parent.Parent;
+
+            // point is used in Android, cause it can get the parent control position from API
+            // Therefore no need to calculate position like this
+            // Get position in iOS
+            if (point == null) {
+                var parent = TargetControl.Parent;
+                while (!(parent == null || parent is IPopupContainerPage)) {
+                    LeftMargin += (parent as VisualElement).X;
+                    TopMargin += (parent as VisualElement).Y;
+                    parent = parent.Parent;
+                }
             }
 
             LeftMargin += AdjustX;

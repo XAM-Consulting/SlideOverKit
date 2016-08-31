@@ -18,14 +18,18 @@ namespace SlideOverKit.MoreSample
             this.PopupViews.Add ("FirstPopup", new PopOverView ());
             this.PopupViews.Add ("SecondPopup", new PopOverWithTriangleView ());
 
-            Content = new StackLayout { 
-                VerticalOptions = LayoutOptions.Center,
-                Spacing = 10,
-                Children = {
-                    button
+
+            Content = new ScrollView {
+                Content = new StackLayout {
+                    Spacing = 10,
+                    Children = {
+                        new BoxView {BackgroundColor = Color.Transparent, HeightRequest = 300},
+                        button,
+                        new BoxView {BackgroundColor = Color.Transparent, HeightRequest = 500},
+                        }
                 }
             };
-                    
+
             this.ToolbarItems.Add (new ToolbarItem {
                 Command = new Command (() => {
                     if (this.PopupViews ["SecondPopup"].IsShown) {

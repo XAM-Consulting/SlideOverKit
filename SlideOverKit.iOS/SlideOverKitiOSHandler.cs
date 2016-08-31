@@ -282,7 +282,7 @@ namespace SlideOverKit.iOS
             nfloat height = (nfloat)(popup.HeightRequest <= 0 ? ScreenSizeHelper.ScreenHeight - popup.TopMargin * 2 : popup.HeightRequest);
  
             var scrollCounters = RecureFindScrolled(_pageRenderer.View);
-            if (scrollCounters.HasValue)
+            if (scrollCounters.HasValue && popup.TargetControl != null) 
             {
                 x -= (nfloat)scrollCounters.Value.X;
                 y -= (nfloat)scrollCounters.Value.Y;
