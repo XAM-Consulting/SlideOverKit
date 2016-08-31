@@ -5,39 +5,32 @@
 			<ColumnDefinition Width="*" />
 			<ColumnDefinition Width="*" />
 		</Grid.ColumnDefinitions>
-		<Grid.RowDefinitions>
-			<RowDefinition Height="*" />
-			<RowDefinition Height="*" />
-			<RowDefinition Height="*" />
-			<RowDefinition Height="*" />
-			<RowDefinition Height="*" />
-			<RowDefinition Height="*" />
-		</Grid.RowDefinitions>
 		<Label Text="Right Side Menu" FontSize="18" Grid.ColumnSpan="2" XAlign="Center" YAlign="Center" TextColor="Black" />
-		<Grid Grid.Column="0" Grid.Row="1" BackgroundColor="#E15771">
+		<Entry Placeholder="Search..."  Grid.ColumnSpan="2" Grid.Row="1" HeightRequest="40" VerticalOptions="Center" />
+		<Grid Grid.Column="0" Grid.Row="2" BackgroundColor="#E15771">
 			<Image Source="Home.png" WidthRequest="50" HeightRequest="50" HorizontalOptions="Center" VerticalOptions="Center" />
 		</Grid>
-		<Grid Grid.Column="1" Grid.Row="1" BackgroundColor="#348ECA">
+		<Grid Grid.Column="1" Grid.Row="2" BackgroundColor="#348ECA">
 			<Image Source="Happy.png" WidthRequest="50" HeightRequest="50" HorizontalOptions="Center" VerticalOptions="Center" />
 		</Grid>
-		<Grid Grid.Column="0" Grid.Row="2" BackgroundColor="#348ECA">
+		<Grid Grid.Column="0" Grid.Row="3" BackgroundColor="#348ECA">
 			<Image Source="Settings.png" WidthRequest="50" HeightRequest="50" HorizontalOptions="Center" VerticalOptions="Center" />
 		</Grid>
-		<Grid Grid.Column="1" Grid.Row="2" BackgroundColor="#348ECA">
+		<Grid Grid.Column="1" Grid.Row="3" BackgroundColor="#348ECA">
 			<Image Source="VideoCall.png" WidthRequest="50" HeightRequest="50" HorizontalOptions="Center" VerticalOptions="Center" />
 		</Grid>
-		<Grid Grid.Column="0" Grid.Row="3" BackgroundColor="#348ECA">
+		<Grid Grid.Column="0" Grid.Row="4" BackgroundColor="#348ECA">
 			<Image Source="Microphone.png" WidthRequest="50" HeightRequest="50" HorizontalOptions="Center" VerticalOptions="Center" />
 		</Grid>
-		<Grid Grid.Column="1" Grid.Row="3" BackgroundColor="#3AAA70">
+		<Grid Grid.Column="1" Grid.Row="4" BackgroundColor="#3AAA70">
 			<Image Source="Enter.png" WidthRequest="50" HeightRequest="50" HorizontalOptions="Center" VerticalOptions="Center" />
 		</Grid>
-		<Grid Grid.Column="0" Grid.Row="4" BackgroundColor="#348ECA">
+		<Grid Grid.Column="0" Grid.Row="5" BackgroundColor="#348ECA">
 			<Image Source="Pencil.png" WidthRequest="50" HeightRequest="50" HorizontalOptions="Center" VerticalOptions="Center" />
 		</Grid>
-		<Grid Grid.Column="1" Grid.Row="4" BackgroundColor="#348ECA">
+		<Grid Grid.Column="1" Grid.Row="5" BackgroundColor="#348ECA">
 			<Image Source="MessageFilled.png" WidthRequest="50" HeightRequest="50" HorizontalOptions="Center" VerticalOptions="Center" />
 		</Grid>
-		<Image Grid.ColumnSpan="2"  Grid.Row="5" WidthRequest="10" HeightRequest="10" HorizontalOptions="Center" VerticalOptions="Center"  Source="DoubleDown_Black.png"/>
+		<Image Grid.ColumnSpan="2"  Grid.Row="6" WidthRequest="10" HeightRequest="10" HorizontalOptions="Center" VerticalOptions="Center"  Source="DoubleDown_Black.png"/>
 	</Grid>
 </t:SlideMenuView>

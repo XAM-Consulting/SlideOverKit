@@ -2,6 +2,7 @@
 <t:SlidePopupView xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:t="clr-namespace:SlideOverKit" x:Class="SlideOverKit.MoreSample.PopOverView">
 	<StackLayout Padding="15,10,15,30" Spacing="20" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
 		<Label HeightRequest="30" Text="Build some Awesome SlideOver's" FontSize="24" XAlign="Center" />
+		<Entry Placeholder="Testing..." HeightRequest="40"/>
 		<Image HeightRequest="40" Source="xamconsulting.png">
 		</Image>
 		<Button x:Name="DoneButton" Text="Close" />

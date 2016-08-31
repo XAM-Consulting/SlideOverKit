@@ -63,6 +63,7 @@ namespace SlideOverKit.iOS
                 _backgroundOverlay.Dispose ();
                 _backgroundOverlay = null;
             }
+            _menuOverlayRenderer.NativeView.EndEditing (true);
         }
 
         void HideBackgroundForPopup ()

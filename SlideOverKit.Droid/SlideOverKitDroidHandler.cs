@@ -5,6 +5,8 @@ using Android.Views;
 using Android.Animation;
 using System.Linq;
 using Android.Util;
+using Android.Views.InputMethods;
+using Android.Content;
 
 namespace SlideOverKit.Droid
 {
@@ -211,7 +213,12 @@ namespace SlideOverKit.Droid
         {
             _currentPopup = null;
             if (_popupRenderer != null) {
+                if (_popupRenderer.ViewGroup.HasFocus) {
+                    InputMethodManager inputManager = (InputMethodManager)Forms.Context.GetSystemService (Context.InputMethodService);
+                    inputManager.HideSoftInputFromWindow (_popupRenderer.ViewGroup.WindowToken, HideSoftInputFlags.None);
+                }            
                 _pageRenderer.RemoveView (_popupRenderer.ViewGroup);
+                _popupRenderer.Dispose();
                 _popupRenderer = null;
             }
             if (_backgroundOverlay != null) {
