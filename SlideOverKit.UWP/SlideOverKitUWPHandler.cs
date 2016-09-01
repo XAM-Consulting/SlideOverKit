@@ -337,7 +337,16 @@ namespace SlideOverKit.UWP
                 return false;
             var popup = _popupBasePage.PopupViews[_currentPopup] as SlidePopupView;
 
-            popup.CalucatePosition();
+            Point? position = null;
+            if (popup.TargetControl!=null)
+            {
+                var nativeElement = popup.TargetControl.GetOrCreateRenderer() as Panel;
+                var ttv = nativeElement.TransformToVisual(Window.Current.Content);
+                var wpos = ttv.TransformPoint(new Windows.Foundation.Point(0, 0));
+                position = new Point(wpos.X, wpos.Y);
+            }
+
+            popup.CalucatePosition(position);
             double y = popup.TopMargin;
             double x = popup.LeftMargin;
             double width = (popup.WidthRequest <= 0 ? ScreenSizeHelper.ScreenWidth - popup.LeftMargin * 2 : popup.WidthRequest);
