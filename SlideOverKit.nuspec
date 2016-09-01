@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>SlideOverKit</id>
-    <version>2.1.0</version>
+    <version>2.1.2</version>
     <title>SlideOverKit</title>
     <authors>Michael Ridland @ XAM Consulting</authors>
     <owners>Michael Ridland @ XAM Consulting</owners>
@@ -10,6 +10,34 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Easily Create Awesome Slideover's in Xamarin.Forms</description>
     <tags>Xamarin, Xamarin.Forms, SlideOverKit</tags>
+    <releaseNotes>
+2.1.2
+[fix] Popups crash on Android if target control is null.
+[fix] Menu cannot unfocused when it disappear.
+
+2.1.1
+[fix] Menu doesn't work in the first page of UWP
+[fix] Popups doesn't work correctly in ScrollView and TableViews.
+
+2.1.0
+[feature] Add AdjustX/Y in SlidePopupView
+
+2.0.0
+[feature] Support UWP.
+
+1.1.0
+[feature] Support with Xamarin.Forms 2.2.
+[fix] Layout fixes thanks to the great Jason Smith (@jassmith87).
+
+1.0.2.1
+[fix] Rotation layout issues.
+
+1.0.2
+[feature] Add new multiple pop-over control, it can anchor to specified control.
+
+1.0.0
+[feature] Add SlideMenuView.
+    </releaseNotes>
   </metadata>
   <files>
     <file src="SlideOverKit\bin\Release\SlideOverKit*.*" target="lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10" />
