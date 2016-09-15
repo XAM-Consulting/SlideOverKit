@@ -47,6 +47,7 @@ namespace SlideOverKit
         public void DragBegin (double x, double y)
         {
             _oldY = y;
+            _willShown = true;
         }
 
         public void DragMoving (double x, double y)
@@ -106,40 +107,28 @@ namespace SlideOverKit
         public void LayoutShowStatus ()
         {
             if (RequestLayout != null) {
-                _top = _isToptoBottom ? _topMax : _topMin;
-                _bottom = _isToptoBottom ? _bottomMax : _bottomMin;
-                RequestLayout (
-                    _left,
-                    _top,
-                    _right,
-                    _bottom,
-                    _density);
+                GetShowPosition ();
+                RequestLayout (_left, _top, _right, _bottom, _density);
             }
             if (NeedShowBackgroundView != null)
                 NeedShowBackgroundView (true, 1);
-            _willShown = false;
         }
 
         public void LayoutHideStatus ()
         {
             if (RequestLayout != null) {
-                _top = _isToptoBottom ? _topMin : _topMax;
-                _bottom = _isToptoBottom ? _bottomMin : _bottomMax;
-                RequestLayout (
-                    _left,
-                    _top,
-                    _right,
-                    _bottom,
-                    _density);
+                GetHidePosition ();
+                RequestLayout (_left, _top, _right, _bottom, _density);
             }
             if (NeedShowBackgroundView != null)
                 NeedShowBackgroundView (false, 0);
-            _willShown = true;
         }
 
         public Rect GetShowPosition ()
         {
             _willShown = false;
+            _top = _isToptoBottom ? _topMax : _topMin;
+            _bottom = _isToptoBottom ? _bottomMax : _bottomMin;
             return new Rect () { 
                 left = _left, 
                 top = _isToptoBottom ? _topMax : _topMin, 
@@ -151,6 +140,8 @@ namespace SlideOverKit
         public Rect GetHidePosition ()
         {
             _willShown = true;
+            _top = _isToptoBottom ? _topMin : _topMax;
+            _bottom = _isToptoBottom ? _bottomMin : _bottomMax;
             return new Rect () { 
                 left = _left, 
                 top = _isToptoBottom ? _topMin : _topMax,

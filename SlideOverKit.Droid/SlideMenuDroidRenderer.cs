@@ -47,11 +47,10 @@ namespace SlideOverKit.Droid
             MotionEventActions action = e.Action & MotionEventActions.Mask;
             if (action == MotionEventActions.Down)
                 _dragGesture.DragBegin (e.RawX, e.RawY);   
-            if (action == MotionEventActions.Up)
-                _dragGesture.DragFinished ();
-
             if (action == MotionEventActions.Move)
                 _dragGesture.DragMoving (e.RawX, e.RawY);
+            if (action == MotionEventActions.Up)
+                _dragGesture.DragFinished ();
             return base.OnTouchEvent (e);
         }
 

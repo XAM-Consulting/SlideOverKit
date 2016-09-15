@@ -47,14 +47,17 @@ namespace SlideOverKit
         public void DragBegin (double x, double y)
         {
             _oldX = x;
+            _willShown = true;
         }
 
         public void DragMoving (double x, double y)
         {
-            double delta = x - _oldX;           
+           
+            double delta = x - _oldX;
             // Movement is too small on Android, so we treat it as click           
-            if (delta > -2 && delta < 2)
+            if (delta > -2 && delta < 2) {
                 return;
+            }
             
             if (delta > 0)
                 _willShown = !(true ^ _isLeftToRight);
@@ -64,6 +67,7 @@ namespace SlideOverKit
             _right += delta;
             ChecklowerBound ();
             CheckUpperBound ();
+
             if (RequestLayout != null)
                 RequestLayout (_left, _top, _right, _bottom, _density);
             if (NeedShowBackgroundView != null) {
@@ -104,31 +108,18 @@ namespace SlideOverKit
         public void LayoutShowStatus ()
         {
             if (RequestLayout != null) {
-                _left = _isLeftToRight ? _leftMax : _leftMin;
-                _right = _isLeftToRight ? _rightMax : _rightMin;
-                RequestLayout (
-                    _left,
-                    _top,
-                    _right,
-                    _bottom,
-                    _density);
+                GetShowPosition ();
+                RequestLayout (_left, _top, _right, _bottom, _density);
             }
             if (NeedShowBackgroundView != null)
-                NeedShowBackgroundView (true, 1);
-            _willShown = false;
+                NeedShowBackgroundView (true, 1);          
         }
 
         public void LayoutHideStatus ()
         {
             if (RequestLayout != null) {
-                _left = _isLeftToRight ? _leftMin : _leftMax;
-                _right = _isLeftToRight ? _rightMin : _rightMax;
-                RequestLayout (
-                    _left,
-                    _top,
-                    _right,
-                    _bottom,
-                    _density);
+                GetHidePosition ();
+                RequestLayout (_left, _top, _right, _bottom, _density);
             }
             if (NeedShowBackgroundView != null)
                 NeedShowBackgroundView (false, 0);
@@ -138,10 +129,12 @@ namespace SlideOverKit
         public Rect GetShowPosition ()
         {	
             _willShown = false;
+            _left = _isLeftToRight ? _leftMax : _leftMin;
+            _right = _isLeftToRight ? _rightMax : _rightMin;
             return new Rect () { 
-                left = _isLeftToRight ? _leftMax : _leftMin,
+                left = _left,
                 top = _top,
-                right = _isLeftToRight ? _rightMax : _rightMin, 
+                right = _right, 
                 bottom = _bottom
             };
         }
@@ -149,10 +142,12 @@ namespace SlideOverKit
         public Rect GetHidePosition ()
         {
             _willShown = true;
-            return new Rect () { 
-                left = _isLeftToRight ? _leftMin : _leftMax,
-                top = _top, 
-                right = _isLeftToRight ? _rightMin : _rightMax, 
+            _left = _isLeftToRight ? _leftMin : _leftMax;
+            _right = _isLeftToRight ? _rightMin : _rightMax;
+            return new Rect () {
+                left = _left,
+                top = _top,
+                right = _right,
                 bottom = _bottom
             };
         }
