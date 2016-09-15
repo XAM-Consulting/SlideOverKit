@@ -81,7 +81,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="MenuContainerPageDroidRenderer.cs" />
     <Compile Include="SlideMenuDroidRenderer.cs" />
     <Compile Include="ISlideOverKitPageRendererDroid.cs" />
@@ -89,11 +88,7 @@
     <Compile Include="SlidePopupViewRendererDroid.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\AboutResources.txt" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\values\Strings.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Import Project="..\packages\Xamarin.Android.Support.Vector.Drawable.23.3.0\build\Xamarin.Android.Support.Vector.Drawable.targets" Condition="Exists('..\packages\Xamarin.Android.Support.Vector.Drawable.23.3.0\build\Xamarin.Android.Support.Vector.Drawable.targets')" />
@@ -104,8 +99,5 @@
       <Project>{EF099C9A-2BB4-468D-8352-867896E7B275}</Project>
       <Name>SlideOverKit</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\layout\" />
   </ItemGroup>
 </Project>
