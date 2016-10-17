@@ -11,6 +11,9 @@
     <description>Easily Create Awesome Slideover's in Xamarin.Forms</description>
     <tags>Xamarin, Xamarin.Forms, SlideOverKit</tags>
     <releaseNotes>
+2.1.4
+[fix] Popups position incorrect issue on iOS.
+
 2.1.3
 [fix] Improve the moving gesture performance.
 [fix] Remove resource file in Android library.
