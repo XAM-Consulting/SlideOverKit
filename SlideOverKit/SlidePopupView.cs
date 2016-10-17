@@ -5,35 +5,35 @@ namespace SlideOverKit
 {
     public class SlidePopupView : Frame
     {
-        public static readonly BindableProperty LeftMarginProperty = BindableProperty.Create (nameof (TopMargin), typeof(double), typeof(SlidePopupView), default(double));
+        public static readonly BindableProperty LeftMarginProperty = BindableProperty.Create (nameof (TopMargin), typeof (double), typeof (SlidePopupView), default (double));
 
         public double LeftMargin {
             get { return (double)GetValue (LeftMarginProperty); }
             set { SetValue (LeftMarginProperty, value); }
         }
 
-        public static readonly BindableProperty TopMarginProperty = BindableProperty.Create (nameof (TopMargin), typeof(double), typeof(SlidePopupView), default(double));
+        public static readonly BindableProperty TopMarginProperty = BindableProperty.Create (nameof (TopMargin), typeof (double), typeof (SlidePopupView), default (double));
 
         public double TopMargin {
             get { return (double)GetValue (TopMarginProperty); }
             set { SetValue (TopMarginProperty, value); }
         }
 
-        public static readonly BindableProperty BackgroundViewColorProperty = BindableProperty.Create (nameof (BackgroundViewColor), typeof(Color), typeof(SlidePopupView), Color.Gray);
+        public static readonly BindableProperty BackgroundViewColorProperty = BindableProperty.Create (nameof (BackgroundViewColor), typeof (Color), typeof (SlidePopupView), Color.Gray);
 
-        public Color BackgroundViewColor { 
+        public Color BackgroundViewColor {
             get { return (Color)GetValue (BackgroundViewColorProperty); }
             set { SetValue (BackgroundViewColorProperty, value); }
-        }            
+        }
 
-        public static readonly BindableProperty AdjustXProperty = BindableProperty.Create (nameof (AdjustX), typeof(double), typeof(SlidePopupView), default(double));
+        public static readonly BindableProperty AdjustXProperty = BindableProperty.Create (nameof (AdjustX), typeof (double), typeof (SlidePopupView), default (double));
 
         public double AdjustX {
             get { return (double)GetValue (AdjustXProperty); }
             set { SetValue (AdjustXProperty, value); }
         }
 
-        public static readonly BindableProperty AdjustYProperty = BindableProperty.Create (nameof (AdjustY), typeof(double), typeof(SlidePopupView), default(double));
+        public static readonly BindableProperty AdjustYProperty = BindableProperty.Create (nameof (AdjustY), typeof (double), typeof (SlidePopupView), default (double));
 
         public double AdjustY {
             get { return (double)GetValue (AdjustYProperty); }
@@ -45,7 +45,7 @@ namespace SlideOverKit
         public Action HideMySelf { get; internal set; }
 
         public void Hide ()
-        {            
+        {
             if (HideMySelf != null)
                 HideMySelf ();
         }
@@ -57,13 +57,14 @@ namespace SlideOverKit
             if (TargetControl == null)
                 return;
 
-            if (!point.HasValue)
-            {
-                point = new Point
-                {
+            Point newPos;
+            if (!point.HasValue) {
+                newPos = new Point {
                     X = TargetControl.X,
                     Y = TargetControl.Y
                 };
+            } else {
+                newPos = point.Value;
             }
 
             // In this case, we need to calucate the position every time based on the Target control
@@ -72,26 +73,30 @@ namespace SlideOverKit
             TopMargin = 0;
 
             if (this.HorizontalOptions.Alignment == LayoutAlignment.Start)
-                LeftMargin = point.Value.X;
+                LeftMargin = newPos.X;
             else if (this.HorizontalOptions.Alignment == LayoutAlignment.End)
-                LeftMargin += point.Value.X + TargetControl.Width / 2;
-            else 
-                LeftMargin += point.Value.X + TargetControl.Width / 2 - this.WidthRequest / 2;
+                LeftMargin += newPos.X + TargetControl.Width / 2;
+            else
+                LeftMargin += newPos.X + TargetControl.Width / 2 - this.WidthRequest / 2;
 
             if (this.VerticalOptions.Alignment == LayoutAlignment.Start)
-                TopMargin += point.Value.Y;
+                TopMargin += newPos.Y;
             else if (this.VerticalOptions.Alignment == LayoutAlignment.End)
-                TopMargin += point.Value.Y + TargetControl.Height;
+                TopMargin += newPos.Y + TargetControl.Height;
             else
-                TopMargin += point.Value.Y + (TargetControl.Height / 2);
+                TopMargin += newPos.Y + (TargetControl.Height / 2);
 
 
             // point is used in Android, cause it can get the parent control position from API
             // Therefore no need to calculate position like this
             // Get position in iOS
-            if (point == null) {
+            if (!point.HasValue) {
                 var parent = TargetControl.Parent;
                 while (!(parent == null || parent is IPopupContainerPage)) {
+                    if (parent is ScrollView) {
+                        LeftMargin -= (parent as ScrollView).ScrollX;
+                        TopMargin -= (parent as ScrollView).ScrollY;
+                    }
                     LeftMargin += (parent as VisualElement).X;
                     TopMargin += (parent as VisualElement).Y;
                     parent = parent.Parent;

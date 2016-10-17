@@ -31,7 +31,7 @@ namespace SlideOverKit.iOS
             _menuKit = menuKit;
             _pageRenderer = menuKit as PageRenderer;
 
-            _menuKit.ViewDidAppearEvent = ViewDidAppear; 
+            _menuKit.ViewDidAppearEvent = ViewDidAppear;
             _menuKit.OnElementChangedEvent = OnElementChanged;
             _menuKit.ViewDidLayoutSubviewsEvent = ViewDidLayoutSubviews;
             _menuKit.ViewDidDisappearEvent = ViewDidDisappear;
@@ -89,7 +89,7 @@ namespace SlideOverKit.iOS
                 _backgroundOverlay.BackgroundColor = _basePage.SlideMenu.BackgroundViewColor.ToUIColor ().ColorWithAlpha (value);
                 return;
             }
-            _backgroundOverlay = new UIView ();		
+            _backgroundOverlay = new UIView ();
             _backgroundOverlay.BackgroundColor = _basePage.SlideMenu.BackgroundViewColor.ToUIColor ().ColorWithAlpha (value);
 
             _backgroundOverlay.AddGestureRecognizer (new UITapGestureRecognizer (() => {
@@ -114,51 +114,27 @@ namespace SlideOverKit.iOS
                 _backgroundOverlay.BackgroundColor = color;
                 return;
             }
-            _backgroundOverlay = new UIView ();     
+            _backgroundOverlay = new UIView ();
             _backgroundOverlay.BackgroundColor = color;
 
             _backgroundOverlay.AddGestureRecognizer (new UITapGestureRecognizer (() => {
                 this._popupBasePage.HidePopupAction ();
             }));
-                
+
             _backgroundOverlay.Frame = new CGRect (_pageRenderer.View.Frame.Location, _pageRenderer.View.Frame.Size);
             _pageRenderer.View.AddSubview (_popupNativeView);
-            _pageRenderer.View.InsertSubviewBelow (_backgroundOverlay, _popupNativeView);   
-        }
-
-        Point? RecureFindScrolled(UIView view)
-        {
-            Point? returnSize = null;
-
-            if (view is UIScrollView)
-            {
-                var offset = ((UIScrollView)view).ContentOffset;
-                returnSize = new Point(offset.X, offset.Y);
-            }
-
-            foreach(var sv in view.Subviews)
-            {
-                var size = RecureFindScrolled(sv);
-                if (size.HasValue)
-                {
-                    if (returnSize.HasValue)
-                        returnSize = new Point(returnSize.Value.X + size.Value.X, returnSize.Value.Y + size.Value.Y);
-                    else
-                        returnSize = size;
-                }                    
-            }
-            return returnSize;
+            _pageRenderer.View.InsertSubviewBelow (_backgroundOverlay, _popupNativeView);
         }
 
         void LayoutMenu ()
         {
             if (!CheckPageAndMenu ())
                 return;
-            
+
             // areadly add gesture
             if (_dragGesture != null)
-                return; 
-                    
+                return;
+
             var menu = _basePage.SlideMenu;
 
             _dragGesture = DragGestureFactory.GetGestureByView (menu);
@@ -197,14 +173,14 @@ namespace SlideOverKit.iOS
                         _dragGesture.DragBegin (p0.X, p0.Y);
 
                     } else if (_panGesture.State == UIGestureRecognizerState.Changed
-                               && _panGesture.NumberOfTouches == 1) {  
+                               && _panGesture.NumberOfTouches == 1) {
                         _dragGesture.DragMoving (p0.X, p0.Y);
 
                     } else if (_panGesture.State == UIGestureRecognizerState.Ended) {
                         _dragGesture.DragFinished ();
                     }
                 });
-                _menuOverlayRenderer.NativeView.AddGestureRecognizer (_panGesture);             
+                _menuOverlayRenderer.NativeView.AddGestureRecognizer (_panGesture);
             }
 
             var rect = _dragGesture.GetHidePosition ();
@@ -217,7 +193,7 @@ namespace SlideOverKit.iOS
             _menuOverlayRenderer.NativeView.Frame = new CGRect (
                 rect.left,
                 rect.top,
-                (rect.right - rect.left), 
+                (rect.right - rect.left),
                 (rect.bottom - rect.top));
             _menuOverlayRenderer.NativeView.SetNeedsLayout ();
 
@@ -238,16 +214,16 @@ namespace SlideOverKit.iOS
                         return;
                 }
 
-                _currentPopup = key;                
+                _currentPopup = key;
                 popup = _popupBasePage.PopupViews [_currentPopup] as SlidePopupView;
-                var renderer = Platform.CreateRenderer(popup);
-                Platform.SetRenderer(popup, renderer);
+                var renderer = Platform.CreateRenderer (popup);
+                Platform.SetRenderer (popup, renderer);
                 _popupNativeView = renderer.NativeView;
 
                 CGRect pos = GetPopupPositionAndLayout ();
                 if (pos.IsEmpty)
                     return;
-                
+
                 _popupNativeView.Hidden = false;
 
                 if (_popupNativeView != null) {
@@ -281,13 +257,6 @@ namespace SlideOverKit.iOS
             nfloat x = (nfloat)popup.LeftMargin;
             nfloat width = (nfloat)(popup.WidthRequest <= 0 ? ScreenSizeHelper.ScreenWidth - popup.LeftMargin * 2 : popup.WidthRequest);
             nfloat height = (nfloat)(popup.HeightRequest <= 0 ? ScreenSizeHelper.ScreenHeight - popup.TopMargin * 2 : popup.HeightRequest);
- 
-            var scrollCounters = RecureFindScrolled(_pageRenderer.View);
-            if (scrollCounters.HasValue && popup.TargetControl != null) 
-            {
-                x -= (nfloat)scrollCounters.Value.X;
-                y -= (nfloat)scrollCounters.Value.Y;
-            }
 
             pos = new CGRect (x, y, width, height);
             popup.Layout (pos.ToRectangle ());
@@ -306,7 +275,7 @@ namespace SlideOverKit.iOS
 
             ScreenSizeHelper.ScreenHeight = UIScreen.MainScreen.Bounds.Height;
             ScreenSizeHelper.ScreenWidth = UIScreen.MainScreen.Bounds.Width;
-                       
+
             LayoutMenu ();
             LayoutPopup ();
         }
@@ -317,7 +286,7 @@ namespace SlideOverKit.iOS
         }
 
         public void ViewDidAppear (bool animated)
-        {  
+        {
             if (!CheckPageAndMenu ())
                 return;
             if (_basePage.SlideMenu.IsFullScreen)
@@ -327,7 +296,7 @@ namespace SlideOverKit.iOS
         }
 
         public void ViewDidDisappear (bool animated)
-        {        
+        {
             if (_menuOverlayRenderer != null)
                 _menuOverlayRenderer.NativeView.RemoveFromSuperview ();
             HideBackgroundOverlay ();
@@ -351,7 +320,7 @@ namespace SlideOverKit.iOS
                 ScreenSizeHelper.ScreenWidth = toSize.Width < bigValue ? toSize.Width : bigValue;
             }
 
-            if (!string.IsNullOrEmpty (_currentPopup)) {                
+            if (!string.IsNullOrEmpty (_currentPopup)) {
                 GetPopupPositionAndLayout ();
 
                 // Layout background

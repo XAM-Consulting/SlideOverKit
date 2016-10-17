@@ -20,12 +20,13 @@ namespace SlideOverKit.MoreSample
 
 
             Content = new ScrollView {
+                Orientation= ScrollOrientation.Both,
                 Content = new StackLayout {
                     Spacing = 10,
                     Children = {
-                        new BoxView {BackgroundColor = Color.Transparent, HeightRequest = 300},
+                        new BoxView {BackgroundColor = Color.Transparent, HeightRequest = 300, WidthRequest=300},
                         button,
-                        new BoxView {BackgroundColor = Color.Transparent, HeightRequest = 500},
+                        new BoxView {BackgroundColor = Color.Transparent, HeightRequest = 500, WidthRequest=500},
                         }
                 }
             };
