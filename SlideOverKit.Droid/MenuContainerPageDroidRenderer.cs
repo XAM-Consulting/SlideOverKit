@@ -43,6 +43,12 @@ namespace SlideOverKit.Droid
             if (OnSizeChangedEvent != null)
                 OnSizeChangedEvent (w, h, oldw, oldh);
         }
+
+        protected override void OnDisplayHint(int hint)
+        {
+            IsDisposed = true;
+            base.OnDisplayHint(hint);
+        }
     }
 }
 
