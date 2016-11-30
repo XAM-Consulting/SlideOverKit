@@ -16,7 +16,7 @@ namespace SlideOverKit.Droid
 
         public Action<int,int,int,int> OnSizeChangedEvent { get; set; }
 
-        public bool IsDisposed { get; set; }
+        public bool IsDisposed { get; private set; }
 
         public MenuContainerPageDroidRenderer ()
         {
@@ -44,10 +44,10 @@ namespace SlideOverKit.Droid
                 OnSizeChangedEvent (w, h, oldw, oldh);
         }
 
-        protected override void OnDisplayHint(int hint)
+        protected override void Dispose(bool disposing)
         {
             IsDisposed = true;
-            base.OnDisplayHint(hint);
+            base.Dispose(disposing);
         }
     }
 }
