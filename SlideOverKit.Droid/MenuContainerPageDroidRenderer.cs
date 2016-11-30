@@ -16,6 +16,8 @@ namespace SlideOverKit.Droid
 
         public Action<int,int,int,int> OnSizeChangedEvent { get; set; }
 
+        public bool IsDisposed { get; set; }
+
         public MenuContainerPageDroidRenderer ()
         {
             new SlideOverKitDroidHandler ().Init (this);

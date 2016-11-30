@@ -203,6 +203,8 @@ namespace SlideOverKit.Droid
         void HideBackgroundOverlay ()
         {
             if (_backgroundOverlay != null) {
+                var renderer = _pageRenderer as MenuContainerPageDroidRenderer;
+                if (renderer == null || !renderer.IsDisposed) _pageRenderer.RemoveView(_backgroundOverlay);
                 _pageRenderer.RemoveView (_backgroundOverlay);
                 _backgroundOverlay.Dispose ();
                 _backgroundOverlay = null;
