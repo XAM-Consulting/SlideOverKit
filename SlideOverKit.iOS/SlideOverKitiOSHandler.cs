@@ -286,6 +286,36 @@ namespace SlideOverKit.iOS
             _dragGesture.LayoutHideStatus ();
         }
 
+        void OnViewWillTransitionToSize(CGSize toSize) 
+        {
+            // this is used for rotation 
+            var orientation = UIApplication.SharedApplication.StatusBarOrientation;
+            double bigValue = UIScreen.MainScreen.Bounds.Height > UIScreen.MainScreen.Bounds.Width ? UIScreen.MainScreen.Bounds.Height : UIScreen.MainScreen.Bounds.Width;
+            double smallValue = UIScreen.MainScreen.Bounds.Height < UIScreen.MainScreen.Bounds.Width ? UIScreen.MainScreen.Bounds.Height : UIScreen.MainScreen.Bounds.Width;
+
+            if (orientation == UIInterfaceOrientation.Portrait || orientation == UIInterfaceOrientation.PortraitUpsideDown) {
+                ScreenSizeHelper.ScreenHeight = bigValue;
+            } else {
+                ScreenSizeHelper.ScreenHeight = smallValue;
+            }
+
+            if (toSize.Width < toSize.Height) {
+                // this is used for mutiltasking
+                ScreenSizeHelper.ScreenWidth = toSize.Width < smallValue ? toSize.Width : smallValue;
+            } else {
+                ScreenSizeHelper.ScreenWidth = toSize.Width < bigValue ? toSize.Width : bigValue;
+            }
+
+            if (!string.IsNullOrEmpty (_currentPopup)) {
+                GetPopupPositionAndLayout ();
+
+                // Layout background
+                _backgroundOverlay.Frame = new CGRect (0, 0, ScreenSizeHelper.ScreenWidth, ScreenSizeHelper.ScreenHeight);
+            }
+
+            UpdateMenuLayout ();
+        }
+
         public void OnElementChanged (VisualElementChangedEventArgs e)
         {
             _basePage = e.NewElement as IMenuContainerPage;
@@ -332,36 +362,13 @@ namespace SlideOverKit.iOS
 
         public void ViewWillTransitionToSize (CGSize toSize, IUIViewControllerTransitionCoordinator coordinator)
         {
+            //initial call to move menu off screen to hide it while transitioning
+            double bigValue = UIScreen.MainScreen.Bounds.Height > UIScreen.MainScreen.Bounds.Width ? UIScreen.MainScreen.Bounds.Height : UIScreen.MainScreen.Bounds.Width;
+            ScreenSizeHelper.ScreenWidth = ScreenSizeHelper.ScreenHeight = bigValue;
+            UpdateMenuLayout ();
+
             //handle resizing after transition is complete
-            coordinator.AnimateAlongsideTransition ((obj) => {}, (obj) => {
-                
-                // this is used for rotation 
-                var orientation = UIApplication.SharedApplication.StatusBarOrientation;
-                double bigValue = UIScreen.MainScreen.Bounds.Height > UIScreen.MainScreen.Bounds.Width ? UIScreen.MainScreen.Bounds.Height : UIScreen.MainScreen.Bounds.Width;
-                double smallValue = UIScreen.MainScreen.Bounds.Height < UIScreen.MainScreen.Bounds.Width ? UIScreen.MainScreen.Bounds.Height : UIScreen.MainScreen.Bounds.Width;
-
-                if (orientation == UIInterfaceOrientation.Portrait || orientation == UIInterfaceOrientation.PortraitUpsideDown) {
-                    ScreenSizeHelper.ScreenHeight = bigValue;
-                } else {
-                    ScreenSizeHelper.ScreenHeight = smallValue;
-                }
-
-                if (toSize.Width < toSize.Height) {
-                    // this is used for mutiltasking
-                    ScreenSizeHelper.ScreenWidth = toSize.Width < smallValue ? toSize.Width : smallValue;
-                } else {
-                    ScreenSizeHelper.ScreenWidth = toSize.Width < bigValue ? toSize.Width : bigValue;
-                }
-
-                if (!string.IsNullOrEmpty (_currentPopup)) {
-                    GetPopupPositionAndLayout ();
-
-                    // Layout background
-                    _backgroundOverlay.Frame = new CGRect (0, 0, ScreenSizeHelper.ScreenWidth, ScreenSizeHelper.ScreenHeight);
-                }
-
-                UpdateMenuLayout ();
-            });
+            coordinator.AnimateAlongsideTransition ((obj) => {}, (obj) => OnViewWillTransitionToSize (toSize));
         }
     }
 }
