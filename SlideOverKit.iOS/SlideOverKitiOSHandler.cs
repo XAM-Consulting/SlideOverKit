@@ -268,6 +268,24 @@ namespace SlideOverKit.iOS
 
         }
 
+        void UpdateMenuLayout ()
+        {
+            var menu = _basePage.SlideMenu;
+
+            if (menu == null || _dragGesture == null)
+                return;
+
+            //update layout
+            _dragGesture.UpdateLayoutSize (menu);
+            var rect = _dragGesture.GetHidePosition ();
+            menu.Layout (new Xamarin.Forms.Rectangle (
+                rect.left,
+                rect.top,
+                (rect.right - rect.left),
+                (rect.bottom - rect.top)));
+            _dragGesture.LayoutHideStatus ();
+        }
+
         public void OnElementChanged (VisualElementChangedEventArgs e)
         {
             _basePage = e.NewElement as IMenuContainerPage;
@@ -289,8 +307,16 @@ namespace SlideOverKit.iOS
         {
             if (!CheckPageAndMenu ())
                 return;
-            if (_basePage.SlideMenu.IsFullScreen)
+            if (_basePage.SlideMenu.IsFullScreen) {
+                
+                //set screen width
+                var width = UIApplication.SharedApplication.KeyWindow.Bounds.Width;
+                ScreenSizeHelper.ScreenWidth = width;
+
+                UpdateMenuLayout ();
+
                 UIApplication.SharedApplication.KeyWindow.AddSubview (_menuOverlayRenderer.NativeView);
+            }
             else
                 _pageRenderer.View.AddSubview (_menuOverlayRenderer.NativeView);
         }
@@ -306,40 +332,36 @@ namespace SlideOverKit.iOS
 
         public void ViewWillTransitionToSize (CGSize toSize, IUIViewControllerTransitionCoordinator coordinator)
         {
-            var menu = _basePage.SlideMenu;
+            //handle resizing after transition is complete
+            coordinator.AnimateAlongsideTransition ((obj) => {}, (obj) => {
+                
+                // this is used for rotation 
+                var orientation = UIApplication.SharedApplication.StatusBarOrientation;
+                double bigValue = UIScreen.MainScreen.Bounds.Height > UIScreen.MainScreen.Bounds.Width ? UIScreen.MainScreen.Bounds.Height : UIScreen.MainScreen.Bounds.Width;
+                double smallValue = UIScreen.MainScreen.Bounds.Height < UIScreen.MainScreen.Bounds.Width ? UIScreen.MainScreen.Bounds.Height : UIScreen.MainScreen.Bounds.Width;
 
-            // this is used for rotation 
-            double bigValue = UIScreen.MainScreen.Bounds.Height > UIScreen.MainScreen.Bounds.Width ? UIScreen.MainScreen.Bounds.Height : UIScreen.MainScreen.Bounds.Width;
-            double smallValue = UIScreen.MainScreen.Bounds.Height < UIScreen.MainScreen.Bounds.Width ? UIScreen.MainScreen.Bounds.Height : UIScreen.MainScreen.Bounds.Width;
-            if (toSize.Width < toSize.Height) {
-                ScreenSizeHelper.ScreenHeight = bigValue;
-                // this is used for mutiltasking
-                ScreenSizeHelper.ScreenWidth = toSize.Width < smallValue ? toSize.Width : smallValue;
-            } else {
-                ScreenSizeHelper.ScreenHeight = smallValue;
-                ScreenSizeHelper.ScreenWidth = toSize.Width < bigValue ? toSize.Width : bigValue;
-            }
+                if (orientation == UIInterfaceOrientation.Portrait || orientation == UIInterfaceOrientation.PortraitUpsideDown) {
+                    ScreenSizeHelper.ScreenHeight = bigValue;
+                } else {
+                    ScreenSizeHelper.ScreenHeight = smallValue;
+                }
 
-            if (!string.IsNullOrEmpty (_currentPopup)) {
-                GetPopupPositionAndLayout ();
+                if (toSize.Width < toSize.Height) {
+                    // this is used for mutiltasking
+                    ScreenSizeHelper.ScreenWidth = toSize.Width < smallValue ? toSize.Width : smallValue;
+                } else {
+                    ScreenSizeHelper.ScreenWidth = toSize.Width < bigValue ? toSize.Width : bigValue;
+                }
 
-                // Layout background
-                _backgroundOverlay.Frame = new CGRect (0, 0, ScreenSizeHelper.ScreenWidth, ScreenSizeHelper.ScreenHeight);
-            }
+                if (!string.IsNullOrEmpty (_currentPopup)) {
+                    GetPopupPositionAndLayout ();
 
+                    // Layout background
+                    _backgroundOverlay.Frame = new CGRect (0, 0, ScreenSizeHelper.ScreenWidth, ScreenSizeHelper.ScreenHeight);
+                }
 
-            if (_dragGesture == null)
-                return;
-
-            _dragGesture.UpdateLayoutSize (menu);
-            var rect = _dragGesture.GetHidePosition ();
-            menu.Layout (new Xamarin.Forms.Rectangle (
-                rect.left,
-                rect.top,
-                (rect.right - rect.left),
-                (rect.bottom - rect.top)));
-            _dragGesture.LayoutHideStatus ();
-
+                UpdateMenuLayout ();
+            });
         }
     }
 }
