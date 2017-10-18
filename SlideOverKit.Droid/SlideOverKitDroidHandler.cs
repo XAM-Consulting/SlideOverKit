@@ -12,7 +12,7 @@ namespace SlideOverKit.Droid
 {
     public class SlideOverKitDroidHandler
     {
-        PageRenderer _pageRenderer;
+        VisualElementRenderer<Page> _pageRenderer;
         ISlideOverKitPageRendererDroid _menuKit;
         IMenuContainerPage _basePage;
         IDragGesture _dragGesture;
@@ -31,7 +31,7 @@ namespace SlideOverKit.Droid
         public void Init (ISlideOverKitPageRendererDroid menuKit)
         {
             _menuKit = menuKit;
-            _pageRenderer = menuKit as PageRenderer;
+            _pageRenderer = menuKit as VisualElementRenderer<Page>;
 
             _menuKit.OnElementChangedEvent = OnElementChanged;
             _menuKit.OnLayoutEvent = OnLayout;
