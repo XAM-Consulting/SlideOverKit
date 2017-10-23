@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>SlideOverKit</id>
-    <version>2.1.4</version>
+    <version>2.1.5</version>
     <title>SlideOverKit</title>
     <authors>Michael Ridland @ XAM Consulting</authors>
     <owners>Michael Ridland @ XAM Consulting</owners>
@@ -11,6 +11,9 @@
     <description>Easily Create Awesome Slideover's in Xamarin.Forms</description>
     <tags>Xamarin, Xamarin.Forms, SlideOverKit</tags>
     <releaseNotes>
+2.1.5
+[fix] Gestures not working on Android.
+
 2.1.4
 [fix] Popups position incorrect issue on iOS.
 
