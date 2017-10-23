@@ -51,7 +51,7 @@ namespace SlideOverKit.Droid
                 _dragGesture.DragMoving (e.RawX, e.RawY);
             if (action == MotionEventActions.Up)
                 _dragGesture.DragFinished ();
-            return base.OnTouchEvent (e);
+            return true;
         }
 
     }
