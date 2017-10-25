@@ -27,18 +27,10 @@ Task("Build")
     .IsDependentOn("Restore-NuGet-Packages")
     .Does(() =>
 {
-    if(IsRunningOnWindows())
-    {
-      // Use MSBuild
-      MSBuild(solutionFilePath, settings =>
-        settings.SetConfiguration(configuration));
-    }
-    else
-    {
-      // Use XBuild
-      XBuild(solutionFilePath, settings =>
-        settings.SetConfiguration(configuration));        
-    }
+	MSBuild (solutionFilePath, c => {
+		c.Configuration = configuration;
+		c.MSBuildPlatform = Cake.Common.Tools.MSBuild.MSBuildPlatform.x86;
+	});
 });
 
 Task("NuGet")
