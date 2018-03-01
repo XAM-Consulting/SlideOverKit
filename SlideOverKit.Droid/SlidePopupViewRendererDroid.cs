@@ -2,12 +2,17 @@
 using Xamarin.Forms;
 using SlideOverKit;
 using Xamarin.Forms.Platform.Android;
+using Android.Content;
 
 [assembly: ExportRenderer (typeof(SlidePopupView), typeof(SlideOverKit.Droid.SlidePopupViewRendererDroid))]
 namespace SlideOverKit.Droid
 {
     public class SlidePopupViewRendererDroid: VisualElementRenderer<SlidePopupView>
     {
+        public SlidePopupViewRendererDroid(Context context):base(context)
+        {
+            
+        }
         protected override void OnElementChanged (ElementChangedEventArgs<SlidePopupView> e)
         {
             base.OnElementChanged (e);

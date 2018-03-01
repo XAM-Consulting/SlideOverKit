@@ -23,8 +23,18 @@ namespace SlideOverKit.MoreSample
             // In this case, we just set LeftMargin and TopMargin,
             // you do not need to set the HeightRequest or WidthRequest, as they are no effect in Pop up View.
             // If the view is too small for Android devices, we can reduce the TopMargin.
-            this.TopMargin = Device.OnPlatform<int> (iOSTopMargin, AndroidTopMargin, WinPHoneTopMargin);
-
+            switch (Device.RuntimePlatform)
+            {
+            case Device.iOS:
+                this.TopMargin = iOSTopMargin;
+                break;
+            case Device.Android:
+                this.TopMargin = AndroidTopMargin;
+                break;
+            case Device.UWP:
+                this.TopMargin = WinPHoneTopMargin;
+                break;           
+            }
            
             // The menu will hide without animation, 
             // If you want to have the animation, you can call the MenuContainerPage.HideMenu(), 
