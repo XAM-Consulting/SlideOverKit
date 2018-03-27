@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="SlideOverKit.MoreSample.MyView">
+    <ContentView.Content>
+        <Frame OutlineColor="#f3f3f3" CornerRadius="2" HasShadow="true" HorizontalOptions="Center" VerticalOptions="Center"
+           Margin="0,25,0,0" Padding="0">
+        <Grid HorizontalOptions="Center" WidthRequest="300">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <BoxView Grid.Row="0" HeightRequest="4" BackgroundColor="#0997d3" VerticalOptions="Start" />
+            <ListView x:Name="MainList" Grid.Row="1" RowHeight="50" CachingStrategy="RecycleElement" SeparatorVisibility="None">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Label Grid.Column="0" Text="{Binding DeductibleValue, StringFormat='${0} Deductible'}"  HorizontalOptions="End"  />
+                                <Label Grid.Column="1" Text="|"  HorizontalOptions="Center" />
+                                <Label Grid.Column="2"  Text="{Binding AnnualValue, StringFormat='${0} Premium'}" TextColor="Black"  HorizontalOptions="Start" />
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Grid>
+    </Frame>
+    </ContentView.Content>
+</ContentView>

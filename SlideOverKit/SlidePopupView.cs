@@ -42,7 +42,7 @@ namespace SlideOverKit
 
         public VisualElement TargetControl { get; set; }
 
-        public Action HideMySelf { get; internal set; }
+        public Action HideMySelf { get; set; }
 
         public void Hide ()
         {
@@ -50,7 +50,7 @@ namespace SlideOverKit
                 HideMySelf ();
         }
 
-        internal void CalucatePosition (Point? point = null)
+        public void CalucatePosition (Point? point = null)
         {
             // In this case, popup layout need Left and top margin, 
             // we need not to calucate the position, no matter the sreen orientation 
@@ -113,7 +113,7 @@ namespace SlideOverKit
             this.HasShadow = false;
         }
 
-        public bool IsShown { get; internal set; }
+        public bool IsShown { get; set; }
     }
 }
 

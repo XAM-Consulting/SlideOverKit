@@ -2,7 +2,7 @@
 
 namespace SlideOverKit
 {
-    internal static class ScreenSizeHelper
+    public static class ScreenSizeHelper
     {
         public static double ScreenWidth;
         public static double ScreenHeight;

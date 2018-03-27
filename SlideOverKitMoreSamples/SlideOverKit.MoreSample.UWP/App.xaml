@@ -5,4 +5,21 @@
     xmlns:local="using:SlideOverKit.MoreSample.UWP"
     RequestedTheme="Light">
 
+    <ResourceDictionary>
+           
+
+
+            <!-- New design -->
+            <Color x:Key="ColorRed">#bc3230</Color>
+            <Color x:Key="ColorBlue">#0997d3</Color>
+            <Color x:Key="ColorGreen">#10b187</Color>
+            <Color x:Key="ColorGrey">#898989</Color>
+            <Color x:Key="ColorSeparator">#f0f0f1</Color>
+            <Color x:Key="ColorLightGrey">#f3f3f3</Color>
+            <Color x:Key="ColorLightSilver">#f0f2f3</Color>
+            <Color x:Key="ColorDarkGrey">#363636</Color>
+            <Color x:Key="ColorMiddleGrey">#575757</Color>
+            <Color x:Key="ColorAlertRed">#bc3230</Color>
+        </ResourceDictionary>
+
 </Application>
