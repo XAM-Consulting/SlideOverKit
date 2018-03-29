@@ -11,10 +11,12 @@
     <description>Easily Create Awesome Slideover's in Xamarin.Forms</description>
     <tags>Xamarin, Xamarin.Forms, SlideOverKit</tags>
     <releaseNotes>
-2.1.6
+
+2.1.7
 [update] Updated Xamarin.Forms to lates version (2.5.0.280555).
 [update] Updated Android Support packages.
 [update] Updated Xamarin.Forms obsolete methods
+[update] Converted project to .NET Standard 2.0
 
 2.1.5
 [fix] Gestures not working on Android.
