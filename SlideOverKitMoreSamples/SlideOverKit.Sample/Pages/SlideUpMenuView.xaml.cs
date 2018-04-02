@@ -26,7 +26,7 @@ namespace SlideOverKit.MoreSample
 
             // In some small screen size devices, the menu cannot be full size layout.
             // In this case we need to set different size for Android.
-            if (Device.OS == TargetPlatform.Android)
+            if (Device.RuntimePlatform == Device.Android)
                 this.HeightRequest += 50;
         }
     }

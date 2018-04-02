@@ -2,13 +2,13 @@
 
 namespace SlideOverKit
 {
-    internal struct Rect
+    public struct Rect
     {
         public double left, top, right, bottom;
 
     }
 
-    internal interface IDragGesture
+    public interface IDragGesture
     {
         void DragBegin (double x, double y);
 

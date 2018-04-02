@@ -4,6 +4,7 @@ using SlideOverKit;
 using Xamarin.Forms.Platform.Android;
 using SlideOverKit.Droid;
 using Android.Views;
+using Android.Content;
 
 [assembly: ExportRenderer (typeof(MenuContainerPage), typeof(MenuContainerPageDroidRenderer))]
 namespace SlideOverKit.Droid
@@ -16,7 +17,7 @@ namespace SlideOverKit.Droid
 
         public Action<int,int,int,int> OnSizeChangedEvent { get; set; }
 
-        public MenuContainerPageDroidRenderer ()
+        public MenuContainerPageDroidRenderer (Context context):base(context)
         {
             new SlideOverKitDroidHandler ().Init (this);
         }

@@ -2,9 +2,9 @@
 
 namespace SlideOverKit
 {
-    internal class DragGestureFactory
+    public class DragGestureFactory
     {
-        internal static IDragGesture GetGestureByView (SlideMenuView view, double density = 1.0f)
+        public static IDragGesture GetGestureByView (SlideMenuView view, double density = 1.0f)
         {
             switch (view.MenuOrientations) {
             case MenuOrientation.TopToBottom:
