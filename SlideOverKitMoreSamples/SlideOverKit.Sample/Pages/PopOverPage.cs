@@ -4,21 +4,19 @@ using Xamarin.Forms;
 namespace SlideOverKit.MoreSample
 {
     public class PopOverPage : MenuContainerPage
-    {
-        PopOverView popup = new PopOverView ();
+    {        
         public PopOverPage ()
         {
             var button = new Button {
                 Text = "Show First Popup",
                 Command = new Command (() => 
-                {
-                    popup.StackContent.Children.Add (new MyView ());
+                {                    
                     this.ShowPopup ("FirstPopup");
                 })
             };
 
             // we can add two more Popup control in this way
-            this.PopupViews.Add ("FirstPopup", popup);
+            this.PopupViews.Add ("FirstPopup", new PopOverView ());
             this.PopupViews.Add ("SecondPopup", new PopOverWithTriangleView ());
 
 

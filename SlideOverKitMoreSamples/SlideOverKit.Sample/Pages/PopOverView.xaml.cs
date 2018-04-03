@@ -7,7 +7,6 @@ namespace SlideOverKit.MoreSample
 {
     public partial class PopOverView : SlidePopupView
     {
-        public StackLayout StackContent => MyStackLayout;
         public PopOverView ()
         {
             InitializeComponent ();
@@ -17,23 +16,10 @@ namespace SlideOverKit.MoreSample
             this.WidthRequest = 200;
             this.HeightRequest = 300;          
 
-        }
-    }
+            DoneButton.Clicked += (object sender, EventArgs e) => {
+                this.HideMySelf ();
+            };
 
-    public class DeductibleModel
-    {
-        public DeductibleModel (double deductibleValue, double annualValue)
-        {
-            DeductibleValue = deductibleValue;
-            AnnualValue = annualValue;
-
-        }
-        public double DeductibleValue {
-            get; set;
-        }
-
-        public double AnnualValue {
-            get; set;
         }
     }
 }
