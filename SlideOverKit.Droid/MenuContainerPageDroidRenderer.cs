@@ -17,6 +17,8 @@ namespace SlideOverKit.Droid
 
         public Action<int,int,int,int> OnSizeChangedEvent { get; set; }
 
+        public bool IsDisposed { get; private set; }
+
         public MenuContainerPageDroidRenderer (Context context):base(context)
         {
             new SlideOverKitDroidHandler ().Init (this);
@@ -41,6 +43,12 @@ namespace SlideOverKit.Droid
             base.OnSizeChanged (w, h, oldw, oldh);
             if (OnSizeChangedEvent != null)
                 OnSizeChangedEvent (w, h, oldw, oldh);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            IsDisposed = true;
+            base.Dispose(disposing);
         }
     }
 }
