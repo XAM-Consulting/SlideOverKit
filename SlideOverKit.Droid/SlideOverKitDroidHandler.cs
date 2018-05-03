@@ -202,10 +202,20 @@ namespace SlideOverKit.Droid
 
         void HideBackgroundOverlay ()
         {
-            if (_backgroundOverlay != null) {
-                _pageRenderer.RemoveView (_backgroundOverlay);
-                _backgroundOverlay.Dispose ();
+            try
+            {
+                if (_backgroundOverlay != null)
+                {
+                    _pageRenderer.RemoveView(_backgroundOverlay);
+                    _backgroundOverlay.Dispose();
+                    _backgroundOverlay = null;
+                }
+            }
+            catch(ObjectDisposedException)
+            {
+                // On Android, _backgroundOverlay was not null but HAD been disposed. Attempting to remove it caused an ObjectDisposedException
                 _backgroundOverlay = null;
+                // Swallow this - let anything else cause a problem
             }
         }
 
