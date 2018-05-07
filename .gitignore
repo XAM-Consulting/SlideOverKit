@@ -234,4 +234,7 @@ _Pvt_Extensions
 
 # FAKE - F# Make
 .fake/
-tools
+
+# Cake Build related
+tools/**
+!tools/packages.config
