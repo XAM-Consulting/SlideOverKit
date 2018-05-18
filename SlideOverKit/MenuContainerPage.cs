@@ -36,6 +36,48 @@ namespace SlideOverKit
 
         public Action HidePopupAction { get; set; }
 
+        /// <summary>
+        /// This is a property that people using mvvm frameworks can bind to, as an alternative to explicitely calling
+        /// ShowMenu and HideMenu methods directly. 
+        /// </summary>
+        public bool IsMenuVisible
+        {
+            get { return (bool)GetValue(IsMenuVisibleProperty); }
+            set { SetValue(IsMenuVisibleProperty, value); }
+        }
+
+        /// <summary>
+        /// The backing bindable property for IsMenuVisible
+        /// </summary>
+        public static readonly BindableProperty IsMenuVisibleProperty =
+            BindableProperty.Create("IsMenuVisible", typeof(bool), typeof(MenuContainerPage), false, BindingMode.TwoWay, null,
+                (bindable, oldValue, newValue) =>
+                {
+                    //One property changed we hide or show the menu. 
+                    if (oldValue != newValue)
+                    {
+                        var thisView = (MenuContainerPage)bindable;
+                        if ((bool)newValue) thisView.ShowMenu();
+                        else thisView.HideMenu();
+                    }
+                },
+                (bindable, oldValue, newValue) =>
+                {
+                    // Property is changing
+                },
+                (bindable, value) =>
+                {
+                    // Coerce the property
+                    // Here we would override what the passed in value is
+                    // And return something else - if we wanted to
+                    return value;
+                },
+                 (bindable) =>
+                 {
+                     // This is the default creator
+                     return false;
+                 });
+
         public void ShowMenu ()
         {
             if (ShowMenuAction != null)
