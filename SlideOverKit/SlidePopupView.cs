@@ -97,8 +97,10 @@ namespace SlideOverKit
                         LeftMargin -= (parent as ScrollView).ScrollX;
                         TopMargin -= (parent as ScrollView).ScrollY;
                     }
-                    LeftMargin += (parent as VisualElement).X;
-                    TopMargin += (parent as VisualElement).Y;
+                    if (parent is VisualElement) {
+                        LeftMargin += (parent as VisualElement).X;
+                        TopMargin += (parent as VisualElement).Y;
+                    }
                     parent = parent.Parent;
                 }
             }
