@@ -22,13 +22,14 @@ namespace SlideOverKit.Droid
         IPopupContainerPage _popupBasePage;
         IVisualElementRenderer _popupRenderer;
         string _currentPopup = null;
+        Context _context;
 
         public SlideOverKitDroidHandler ()
         {
         }
 
 
-        public void Init (ISlideOverKitPageRendererDroid menuKit)
+        public void Init (ISlideOverKitPageRendererDroid menuKit, Context context)
         {
             _menuKit = menuKit;
             _pageRenderer = menuKit as PageRenderer;
@@ -36,6 +37,8 @@ namespace SlideOverKit.Droid
             _menuKit.OnElementChangedEvent = OnElementChanged;
             _menuKit.OnLayoutEvent = OnLayout;
             _menuKit.OnSizeChangedEvent = OnSizeChanged;
+
+            _context = context;
         }
 
         void OnElementChanged (ElementChangedEventArgs<Page> e)
@@ -71,7 +74,7 @@ namespace SlideOverKit.Droid
                     .Y ((float)rect.top)
                     .SetDuration (menu.AnimationDurationMillisecond)
                     .SetListener (new AnimatorListener (_dragGesture, false))
-                    .Start ();             
+                    .Start ();
             };
 
             _basePage.ShowMenuAction = () => {
@@ -83,11 +86,12 @@ namespace SlideOverKit.Droid
                     .Y ((float)rect.top)
                     .SetDuration (menu.AnimationDurationMillisecond)
                     .SetListener (new AnimatorListener (_dragGesture, true))
-                    .Start ();     
-            };      
+                    .Start ();
+            };
 
             if (_popMenuOverlayRenderer == null) {
-                _popMenuOverlayRenderer = Platform.CreateRendererWithContext(menu,Android.App.Application.Context);
+                menu.Parent = (Page)_basePage;
+                _popMenuOverlayRenderer = Platform.CreateRendererWithContext (menu, _context);
                 Platform.SetRenderer (menu, _popupRenderer);
 
                 var metrics = _pageRenderer.Resources.DisplayMetrics;
@@ -100,9 +104,9 @@ namespace SlideOverKit.Droid
                 var rect = _dragGesture.GetHidePosition ();
 
                 menu.Layout (new Xamarin.Forms.Rectangle (
-                    rect.left / metrics.Density, 
-                    rect.top / metrics.Density, 
-                    (rect.right - rect.left) / metrics.Density, 
+                    rect.left / metrics.Density,
+                    rect.top / metrics.Density,
+                    (rect.right - rect.left) / metrics.Density,
                     (rect.bottom - rect.top) / metrics.Density));
 
                 _popMenuOverlayRenderer.UpdateLayout ();
@@ -137,7 +141,8 @@ namespace SlideOverKit.Droid
 
                 _currentPopup = key;
                 popup = _popupBasePage.PopupViews [_currentPopup] as SlidePopupView;
-                _popupRenderer = Platform.CreateRendererWithContext(popup,Android.App.Application.Context);
+                popup.Parent = (Page)_popupBasePage;
+                _popupRenderer = Platform.CreateRendererWithContext (popup, _context);
                 Platform.SetRenderer (popup, _popupRenderer);
 
                 var rect = LayoutPopup ();
@@ -193,26 +198,22 @@ namespace SlideOverKit.Droid
             popup.Layout (new Xamarin.Forms.Rectangle (x, y, width, height));
             _popupRenderer.UpdateLayout ();
             return new Rect {
-                left = x * metrics.Density, 
-                top = y * metrics.Density, 
-                right = (x + width) * metrics.Density, 
+                left = x * metrics.Density,
+                top = y * metrics.Density,
+                right = (x + width) * metrics.Density,
                 bottom = (y + height) * metrics.Density
             };
         }
 
         void HideBackgroundOverlay ()
         {
-            try
-            {
-                if (_backgroundOverlay != null)
-                {
-                    _pageRenderer.RemoveView(_backgroundOverlay);
-                    _backgroundOverlay.Dispose();
+            try {
+                if (_backgroundOverlay != null) {
+                    _pageRenderer.RemoveView (_backgroundOverlay);
+                    _backgroundOverlay.Dispose ();
                     _backgroundOverlay = null;
                 }
-            }
-            catch(ObjectDisposedException)
-            {
+            } catch (ObjectDisposedException) {
                 // On Android, _backgroundOverlay was not null but HAD been disposed. Attempting to remove it caused an ObjectDisposedException
                 _backgroundOverlay = null;
                 // Swallow this - let anything else cause a problem
@@ -226,9 +227,9 @@ namespace SlideOverKit.Droid
                 if (_popupRenderer.View.HasFocus) {
                     InputMethodManager inputManager = (InputMethodManager)Android.App.Application.Context.GetSystemService (Context.InputMethodService);
                     inputManager.HideSoftInputFromWindow (_popupRenderer.View.WindowToken, HideSoftInputFlags.None);
-                }            
+                }
                 _pageRenderer.RemoveView (_popupRenderer.View);
-                _popupRenderer.Dispose();
+                _popupRenderer.Dispose ();
                 _popupRenderer = null;
             }
             if (_backgroundOverlay != null) {
@@ -253,7 +254,7 @@ namespace SlideOverKit.Droid
                 _backgroundOverlay.SetBackgroundColor (color);
                 return;
             }
-            _backgroundOverlay = new global::Android.Widget.LinearLayout (Android.App.Application.Context);       
+            _backgroundOverlay = new global::Android.Widget.LinearLayout (Android.App.Application.Context);
             _pageRenderer.ViewGroup.AddView (_backgroundOverlay);
             _backgroundOverlay.SetBackgroundColor (_basePage.SlideMenu.BackgroundViewColor.ToAndroid ());
 
@@ -261,9 +262,9 @@ namespace SlideOverKit.Droid
             _backgroundOverlay.Touch += HideMenu;
             var metrics = _pageRenderer.Resources.DisplayMetrics;
             _backgroundOverlay.Layout (
-                0, 
-                0, 
-                (int)(ScreenSizeHelper.ScreenWidth * metrics.Density), 
+                0,
+                0,
+                (int)(ScreenSizeHelper.ScreenWidth * metrics.Density),
                 (int)(ScreenSizeHelper.ScreenHeight * metrics.Density));
 
         }
@@ -277,14 +278,14 @@ namespace SlideOverKit.Droid
         {
             _popupBasePage.HidePopupAction ();
         }
-            
+
         void ShowBackgroundForPopup (Android.Graphics.Color color)
         {
             if (_popupBasePage == null)
                 return;
             if (_popupRenderer == null)
                 return;
-            _backgroundOverlay = new global::Android.Widget.LinearLayout (Android.App.Application.Context);       
+            _backgroundOverlay = new global::Android.Widget.LinearLayout (Android.App.Application.Context);
             _pageRenderer.ViewGroup.AddView (_backgroundOverlay);
             _backgroundOverlay.SetBackgroundColor (color);
 
@@ -293,9 +294,9 @@ namespace SlideOverKit.Droid
 
             var metrics = _pageRenderer.Resources.DisplayMetrics;
             _backgroundOverlay.Layout (
-                0, 
-                0, 
-                (int)(ScreenSizeHelper.ScreenWidth * metrics.Density), 
+                0,
+                0,
+                (int)(ScreenSizeHelper.ScreenWidth * metrics.Density),
                 (int)(ScreenSizeHelper.ScreenHeight * metrics.Density));
 
         }
@@ -316,9 +317,9 @@ namespace SlideOverKit.Droid
 
                     var rect = _dragGesture.GetHidePosition ();
                     menu.Layout (new Xamarin.Forms.Rectangle (
-                        rect.left / metrics.Density, 
-                        rect.top / metrics.Density, 
-                        (rect.right - rect.left) / metrics.Density, 
+                        rect.left / metrics.Density,
+                        rect.top / metrics.Density,
+                        (rect.right - rect.left) / metrics.Density,
                         (rect.bottom - rect.top) / metrics.Density));
                     if (_popMenuOverlayRenderer != null)
                         _popMenuOverlayRenderer.UpdateLayout ();
@@ -333,14 +334,14 @@ namespace SlideOverKit.Droid
 
             if (_backgroundOverlay != null)
                 _backgroundOverlay.Layout (
-                    0, 
-                    0, 
-                    (int)(ScreenSizeHelper.ScreenWidth * metrics.Density), 
+                    0,
+                    0,
+                    (int)(ScreenSizeHelper.ScreenWidth * metrics.Density),
                     (int)(ScreenSizeHelper.ScreenHeight * metrics.Density));
         }
     }
 
-    class  AnimatorListener  :Java.Lang.Object, Android.Animation.Animator.IAnimatorListener
+    class AnimatorListener : Java.Lang.Object, Android.Animation.Animator.IAnimatorListener
     {
         IDragGesture _dragGesture;
         bool _isShow;

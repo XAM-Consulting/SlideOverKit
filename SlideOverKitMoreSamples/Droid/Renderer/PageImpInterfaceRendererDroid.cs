@@ -6,7 +6,7 @@ using SlideOverKit.MoreSample;
 using SlideOverKit.MoreSample.Droid;
 using Android.Content;
 
-[assembly: ExportRenderer (typeof(SlideDownMenuPage), typeof(PageImpInterfaceRendererDroid))]
+[assembly: ExportRenderer (typeof (SlideDownMenuPage), typeof (PageImpInterfaceRendererDroid))]
 namespace SlideOverKit.MoreSample.Droid
 {
     // As your page cannot inherit from MenuContainerPage,
@@ -15,13 +15,13 @@ namespace SlideOverKit.MoreSample.Droid
     {
         public Action<ElementChangedEventArgs<Page>> OnElementChangedEvent { get; set; }
 
-        public Action<bool, int,int,int,int> OnLayoutEvent { get; set; }
+        public Action<bool, int, int, int, int> OnLayoutEvent { get; set; }
 
-        public Action<int,int,int,int> OnSizeChangedEvent { get; set; }
+        public Action<int, int, int, int> OnSizeChangedEvent { get; set; }
 
-        public PageImpInterfaceRendererDroid (Context context):base(context)
+        public PageImpInterfaceRendererDroid (Context context) : base (context)
         {
-            new SlideOverKitDroidHandler ().Init (this);
+            new SlideOverKitDroidHandler ().Init (this, context);
         }
 
         protected override void OnElementChanged (ElementChangedEventArgs<Page> e)
