@@ -6,21 +6,16 @@ using SlideOverKit;
 using Android.Views;
 using Android.Content;
 
-[assembly: ExportRenderer (typeof(SlideMenuView), typeof(SlideMenuDroidRenderer))]
+[assembly: ExportRenderer (typeof (SlideMenuView), typeof (SlideMenuDroidRenderer))]
 namespace SlideOverKit.Droid
 {
-    public class SlideMenuDroidRenderer : ViewRenderer <SlideMenuView, Android.Views.View>
+    public class SlideMenuDroidRenderer : ViewRenderer<SlideMenuView, Android.Views.View>
     {
         IDragGesture _dragGesture;
 
         internal IDragGesture GragGesture { get { return _dragGesture; } }
 
-        public SlideMenuDroidRenderer():base()
-        {
-
-        }
-
-        public SlideMenuDroidRenderer (Context context):base(context)
+        public SlideMenuDroidRenderer (Context context) : base (context)
         {
         }
 
@@ -35,24 +30,24 @@ namespace SlideOverKit.Droid
             var menu = Element as SlideMenuView;
             if (menu == null)
                 return;
-            if (ScreenSizeHelper.ScreenHeight == 0 && ScreenSizeHelper.ScreenWidth == 0) {               
+            if (ScreenSizeHelper.ScreenHeight == 0 && ScreenSizeHelper.ScreenWidth == 0) {
                 ScreenSizeHelper.ScreenWidth = Resources.DisplayMetrics.WidthPixels / Resources.DisplayMetrics.Density;
                 ScreenSizeHelper.ScreenHeight = Resources.DisplayMetrics.HeightPixels / Resources.DisplayMetrics.Density;
-            }            
+            }
             _dragGesture = DragGestureFactory.GetGestureByView (menu, this.Resources.DisplayMetrics.Density);
             _dragGesture.RequestLayout = (l, t, r, b, desity) => {
                 this.SetX ((float)l);
                 this.SetY ((float)t);
-            };           
+            };
         }
-         
+
         public override bool OnTouchEvent (MotionEvent e)
         {
             if (_dragGesture == null)
                 return false;
             MotionEventActions action = e.Action & MotionEventActions.Mask;
             if (action == MotionEventActions.Down)
-                _dragGesture.DragBegin (e.RawX, e.RawY);   
+                _dragGesture.DragBegin (e.RawX, e.RawY);
             if (action == MotionEventActions.Move)
                 _dragGesture.DragMoving (e.RawX, e.RawY);
             if (action == MotionEventActions.Up)

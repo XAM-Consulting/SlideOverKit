@@ -238,3 +238,5 @@ _Pvt_Extensions
 # Cake Build related
 tools/**
 !tools/packages.config
+
+\.mfractor/
