@@ -3,13 +3,14 @@ using Xamarin.Forms;
 
 namespace SlideOverKit.MoreSample
 {
-    public class PopOverPage: MenuContainerPage
-    {
+    public class PopOverPage : MenuContainerPage
+    {        
         public PopOverPage ()
         {
             var button = new Button {
                 Text = "Show First Popup",
-                Command = new Command (() => {
+                Command = new Command (() => 
+                {                    
                     this.ShowPopup ("FirstPopup");
                 })
             };
@@ -20,7 +21,7 @@ namespace SlideOverKit.MoreSample
 
 
             Content = new ScrollView {
-                Orientation= ScrollOrientation.Both,
+                Orientation = ScrollOrientation.Both,
                 Content = new StackLayout {
                     Spacing = 10,
                     Children = {
@@ -33,6 +34,7 @@ namespace SlideOverKit.MoreSample
 
             this.ToolbarItems.Add (new ToolbarItem {
                 Command = new Command (() => {
+                    
                     if (this.PopupViews ["SecondPopup"].IsShown) {
                         this.HidePopup ();
                     } else {

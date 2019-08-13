@@ -4,7 +4,6 @@ using UIKit;
 using CoreGraphics;
 using Xamarin.Forms;
 using System.Linq;
-using System.Diagnostics;
 
 namespace SlideOverKit.iOS
 {
@@ -184,7 +183,7 @@ namespace SlideOverKit.iOS
             }
 
             var rect = _dragGesture.GetHidePosition ();
-            menu.Layout (new Xamarin.Forms.Rectangle (
+            menu.Layout (new Rectangle (
                 rect.left,
                 rect.top,
                 (rect.right - rect.left),

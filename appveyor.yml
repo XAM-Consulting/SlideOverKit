@@ -1,0 +1,9 @@
+version: 1.0.{build}
+image: Visual Studio 2017
+install:
+- appveyor-retry powershell .\install-android-sdk.ps1
+before_build:
+- cmd: dotnet --info
+build_script:
+- cmd: PowerShell -Version 2.0 .\build.ps1
+test: off

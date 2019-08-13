@@ -4,6 +4,7 @@ using SlideOverKit.Droid;
 using Xamarin.Forms.Platform.Android;
 using SlideOverKit;
 using Android.Views;
+using Android.Content;
 
 [assembly: ExportRenderer (typeof(SlideMenuView), typeof(SlideMenuDroidRenderer))]
 namespace SlideOverKit.Droid
@@ -14,7 +15,12 @@ namespace SlideOverKit.Droid
 
         internal IDragGesture GragGesture { get { return _dragGesture; } }
 
-        public SlideMenuDroidRenderer ()
+        public SlideMenuDroidRenderer():base()
+        {
+
+        }
+
+        public SlideMenuDroidRenderer (Context context):base(context)
         {
         }
 
@@ -51,7 +57,7 @@ namespace SlideOverKit.Droid
                 _dragGesture.DragMoving (e.RawX, e.RawY);
             if (action == MotionEventActions.Up)
                 _dragGesture.DragFinished ();
-            return base.OnTouchEvent (e);
+            return true;
         }
 
     }
