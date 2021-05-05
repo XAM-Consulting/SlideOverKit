@@ -10,6 +10,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.UWP;
+using SolidColorBrush = Windows.UI.Xaml.Media.SolidColorBrush;
 
 namespace SlideOverKit.UWP
 {
@@ -42,8 +43,12 @@ namespace SlideOverKit.UWP
         void OnElementChanged(ElementChangedEventArgs<Xamarin.Forms.Page> e)
         {
             _basePage = e.NewElement as IMenuContainerPage;
-            e.NewElement.Disappearing += NewElement_Disappearing;
-            e.NewElement.Appearing += NewElement_Appearing;
+            if (e.NewElement != null)
+            {
+                e.NewElement.Disappearing += NewElement_Disappearing;
+                e.NewElement.Appearing += NewElement_Appearing;
+            }
+
             _popupBasePage = e.NewElement as IPopupContainerPage;
             FindRootCanvas(Windows.UI.Xaml.Window.Current.Content);
 
