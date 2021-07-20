@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace SlideOverKit
 {
@@ -6,11 +6,12 @@ namespace SlideOverKit
     {
         double _leftMax, _leftMin, _rightMax, _rightMin = 0;
         bool _isLeftToRight = true;
-
+        SlideMenuView _view;
         public HorizontalGestures (SlideMenuView view, double density) : base (view, density)
         {
-            CheckViewBound (view);
-            UpdateLayoutSize (view);
+            _view = view;
+            CheckViewBound (_view);
+            UpdateLayoutSize (_view);
             view.HideEvent = LayoutHideStatus;
         }
 
@@ -107,6 +108,7 @@ namespace SlideOverKit
 
         public void LayoutShowStatus ()
         {
+            _view.IsMenuShown = true;
             if (RequestLayout != null) {
                 GetShowPosition ();
                 RequestLayout (_left, _top, _right, _bottom, _density);
@@ -117,6 +119,7 @@ namespace SlideOverKit
 
         public void LayoutHideStatus ()
         {
+            _view.IsMenuShown = true;
             if (RequestLayout != null) {
                 GetHidePosition ();
                 RequestLayout (_left, _top, _right, _bottom, _density);
