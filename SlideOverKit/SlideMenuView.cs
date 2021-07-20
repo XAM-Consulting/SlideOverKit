@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using Xamarin.Forms;
 
@@ -13,7 +13,18 @@ namespace SlideOverKit
         RightToLeft,
     }
 
-    public class SlideMenuView : ContentView
+    public class MenuShowEventArgs : EventArgs
+    {
+      public bool IsShown { get; private set; }
+      public MenuShowEventArgs(bool isShown)
+      {
+      IsShown = isShown;
+      }
+    }
+    public delegate void MenuShowEventHandler(object source, MenuShowEventArgs e);
+    
+
+  public class SlideMenuView : ContentView
     {
         public SlideMenuView ()
         {
@@ -21,7 +32,8 @@ namespace SlideOverKit
             this.BackgroundColor = Color.White;
         }
 
-        public static readonly BindableProperty MenuOrientationsProperty = BindableProperty.Create (
+
+    public static readonly BindableProperty MenuOrientationsProperty = BindableProperty.Create (
                                                                                "MenuOrientations", 
                                                                                typeof(MenuOrientation), 
                                                                                typeof(SlideMenuView), 
@@ -141,9 +153,34 @@ namespace SlideOverKit
             }
         }
 
-        internal Action HideEvent { get; set; }
+        public static readonly BindableProperty IsMenuShownProperty = BindableProperty.Create(
+                                                                              "IsMenuShownProperty",
+                                                                              typeof(bool),
+                                                                              typeof(SlideMenuView),
+                                                                              false);
 
-        public void HideWithoutAnimations ()
+    public bool IsMenuShown
+    {
+      get
+      {
+        return (bool)GetValue(IsMenuShownProperty);
+      }
+      set
+      {
+        if (IsMenuShown != value)
+        {
+          SetValue(IsMenuShownProperty, value);
+          if (OnMenuToggle != null)
+          {
+            OnMenuToggle(this, new MenuShowEventArgs(IsMenuShown));
+          }
+        }
+      }
+    }
+    public event MenuShowEventHandler OnMenuToggle;
+    internal Action HideEvent { get; set; }
+
+    public void HideWithoutAnimations ()
         {
             if (HideEvent != null)
                 HideEvent ();
