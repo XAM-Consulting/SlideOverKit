@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace SlideOverKit
 {
@@ -6,15 +6,19 @@ namespace SlideOverKit
     {
         double _topMax, _topMin, _bottomMax, _bottomMin = 0;
         bool _isToptoBottom = true;
-
+        SlideMenuView _view;
+        
         public VerticalGesture (SlideMenuView view, double density) : base (view, density)
         {
-            CheckViewBound (view);
-            UpdateLayoutSize (view);
-            view.HideEvent = LayoutHideStatus;
+            _view = view;
+            CheckViewBound (_view);
+            UpdateLayoutSize (_view);
+            _view.HideEvent = LayoutHideStatus;
         }
 
-        void CheckViewBound (SlideMenuView view)
+
+
+    void CheckViewBound (SlideMenuView view)
         {
             if (ScreenSizeHelper.ScreenHeight == 0 || ScreenSizeHelper.ScreenWidth == 0)
                 throw new Exception ("Please set ScreenSizeHelper.ScreenHeight or ScreenSizeHelper.ScreenWidth");
@@ -106,6 +110,7 @@ namespace SlideOverKit
 
         public void LayoutShowStatus ()
         {
+            _view.IsMenuShown = true;
             if (RequestLayout != null) {
                 GetShowPosition ();
                 RequestLayout (_left, _top, _right, _bottom, _density);
@@ -116,6 +121,7 @@ namespace SlideOverKit
 
         public void LayoutHideStatus ()
         {
+            _view.IsMenuShown = false;
             if (RequestLayout != null) {
                 GetHidePosition ();
                 RequestLayout (_left, _top, _right, _bottom, _density);
